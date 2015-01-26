@@ -7,9 +7,13 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.helpers.Loader;
 
 import de.htwg.chess.controller.IChessController;
 
@@ -21,64 +25,76 @@ public class GamePanel extends JPanel {
 	private static final int COLUMNS = 8;
 	private static final int DRAW_THICKNESS = 3;
 	private static final int IMAGE_GAP = 18;
-	
+
 	private Logger logger = Logger.getLogger("de.htwg.chess.view.gui");
 	private IChessController controller;
 	private Image field;
 
 	/**
 	 * Creates a GamePanel
-	 * @param controller - Chess Controller
+	 * 
+	 * @param controller
+	 *            - Chess Controller
 	 */
 	public GamePanel(final IChessController controller) {
 		this.controller = controller;
 		setBackground(Color.WHITE);
-		
+
 		this.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				try {
-					controller.handleMovement(getMouseRow(e), getMouseColumn(e));
+					controller
+							.handleMovement(getMouseRow(e), getMouseColumn(e));
 				} catch (ArrayIndexOutOfBoundsException ex) {
 					logger.info("Out of field");
-				}	
+				}
 			}
 		});
-		
-		field = getToolkit().getImage("res/chessfield.jpg");
+
+		try {
+			field = ImageIO.read(Loader.getResource("res/chessfield.jpg"));
+		} catch (IOException e) {
+			logger.info("Could not open chessfield.jpg");
+		}
 	}
-	
+
 	/**
 	 * Calculates the row for the current mouse position
-	 * @param e - mouse event
+	 * 
+	 * @param e
+	 *            - mouse event
 	 * @return row for the current mouse position
 	 */
 	private int getMouseRow(MouseEvent e) {
-		return (e.getX()+BORDER_SIZE) / FIELD_SIZE-1;
+		return (e.getX() + BORDER_SIZE) / FIELD_SIZE - 1;
 	}
-	
+
 	/**
 	 * Calculates the column for the current mouse position
-	 * @param e - mouse event
+	 * 
+	 * @param e
+	 *            - mouse event
 	 * @return column for the current mouse position
 	 */
 	private int getMouseColumn(MouseEvent e) {
-		return COLUMNS - (e.getY()+BORDER_SIZE) / FIELD_SIZE;
+		return COLUMNS - (e.getY() + BORDER_SIZE) / FIELD_SIZE;
 	}
-	
+
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
 		g.drawImage(field, 0, 0, null);
 		controller.paint(g);
-		
+
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setStroke(new BasicStroke(DRAW_THICKNESS));
 		g2.setColor(Color.BLACK);
-		
-		if(controller.isSelect()) {
-			g2.drawRect(controller.getSelectedPosX()-IMAGE_GAP, controller.getSelectedPosY()-IMAGE_GAP,
-					FIELD_SIZE, FIELD_SIZE);
+
+		if (controller.isSelect()) {
+			g2.drawRect(controller.getSelectedPosX() - IMAGE_GAP,
+					controller.getSelectedPosY() - IMAGE_GAP, FIELD_SIZE,
+					FIELD_SIZE);
 		}
 	}
 }

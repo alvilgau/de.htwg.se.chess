@@ -15,28 +15,49 @@ public final class Chess {
 
 	private static Scanner scanner;
 	private static TextUI tui;
-	@SuppressWarnings("unused")
 	private static ChessFrame gui;
-	@SuppressWarnings("unused")
 	private static IChessController controller;
-	
+	private static Chess instance;
+
 	private Chess() {
+		// Set up logging through log4j
+		PropertyConfigurator.configure("log4j.properties");
+
 		Injector injector = Guice.createInjector(new ChessModule());
+
 		scanner = new Scanner(System.in);
 		controller = injector.getInstance(IChessController.class);
 		tui = injector.getInstance(TextUI.class);
+
+		// Disable GUI for web deploy
 		gui = injector.getInstance(ChessFrame.class);
 	}
-	
+
+	public static Chess getInstance() {
+		if (instance == null) {
+			instance = new Chess();
+		}
+		return instance;
+	}
+
+	public IChessController getController() {
+		return controller;
+	}
+
+	public TextUI getTui() {
+		return tui;
+	}
+
+	public ChessFrame getGui() {
+		return gui;
+	}
+
 	public static void main(String[] args) {
-		// Set up logging through log4j
-		PropertyConfigurator.configure("log4j.properties");
-		
-		new Chess();
+		getInstance();
 		tui.printTUI();
-		
+
 		boolean run = true;
-		while(run) {
+		while (run) {
 			run = tui.processInputLine(scanner.next());
 		}
 	}
