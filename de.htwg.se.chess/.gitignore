@@ -4,6 +4,7 @@
 ######################
 
 *.class
+chess.log*
  
 # Package Files #
 

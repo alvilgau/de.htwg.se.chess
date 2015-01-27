@@ -17,12 +17,13 @@ public abstract class Figure implements IFigure {
 		white, black
 	};
 
-	private Logger logger = Logger.getLogger("de.htwg.chess.model.impl");
-
-	protected static final int POS_MAX = 7;
-	protected static final int POS_MIN = 0;
+	static final int POS_MAX = 7;
+	static final int POS_MIN = 0;
 	private static final int IMG_FIELD_SIZE = 100;
 	private static final int IMG_GAP = 68;
+
+	private Logger logger = Logger.getLogger("de.htwg.chess.model.impl");
+	protected MoveValidator moveValidator = new MoveValidator();
 
 	private int xPos;
 	private int yPos;
@@ -80,34 +81,17 @@ public abstract class Figure implements IFigure {
 		this.team = team;
 	}
 
-	/**
-	 * Gets the team of a figure
-	 * 
-	 * @return String - the team name
-	 */
+	@Override
 	public String getTeam() {
 		return team.toString();
 	}
 
-	/**
-	 * Gets the team number of a figure
-	 * 
-	 * @return team number
-	 */
+	@Override
 	public int getTeamNumber() {
 		return team.ordinal();
 	}
 
-	/**
-	 * Moves a figure
-	 * 
-	 * @param x
-	 *            - new x position
-	 * @param y
-	 *            - new y position
-	 * @return only true if Pawn reaches end of field, otherwise it returns
-	 *         always false
-	 */
+	@Override
 	public boolean move(int x, int y) {
 		xPos = x;
 		yPos = y;
@@ -115,26 +99,26 @@ public abstract class Figure implements IFigure {
 	}
 
 	/**
-	 * Check the move is valid or not
+	 * Gets a neighbor field
 	 * 
 	 * @param x
-	 *            - the new x position
+	 *            - vertical distance
 	 * @param y
-	 *            - the new y position
+	 *            - horizontal distance
 	 * @param fields
-	 *            - the current playground
-	 * @return true if is a possible move
+	 *            - current playground
+	 * @return the corresponding field
 	 */
-	public boolean possibleMove(int x, int y, IField fields[][]) {
-		/* Check out of field */
-		if (x > POS_MAX || y > POS_MAX || x < POS_MIN || y < POS_MIN) {
-			return false;
+	public IField getNeighbour(int x, int y, IField[][] fields) {
+		int newXPos = xPos + x;
+		int newYPos = yPos + y;
+
+		if (newXPos > POS_MAX || newYPos > POS_MAX || newXPos < POS_MIN
+				|| newYPos < POS_MIN) {
+			return null;
 		}
-		/* Check same position */
-		else if (x == getxPos() && y == getyPos()) {
-			return false;
-		}
-		return true;
+
+		return fields[newXPos][newYPos];
 	}
 
 	/**
@@ -153,39 +137,6 @@ public abstract class Figure implements IFigure {
 			logger.info("Can't Read File");
 		}
 	}
-
-	/**
-	 * Checks if a figure can kill another figure
-	 * 
-	 * @param x
-	 *            - the new x position
-	 * @param y
-	 *            - the new y position
-	 * @param fields
-	 *            - the current playground
-	 * @return true if can kill the other figure
-	 */
-	protected boolean possibleKill(int x, int y, IField fields[][]) {
-		if (fields[x][y].isSet()
-				&& getTeamNumber() == fields[x][y].getFigur().getTeamNumber()) {
-			return false;
-		}
-
-		return true;
-	}
-
-	/**
-	 * Checks for collision between figures
-	 * 
-	 * @param x
-	 *            - the new x position
-	 * @param y
-	 *            - the new y position
-	 * @param fields
-	 *            - current playground
-	 * @return true if no collisions available
-	 */
-	protected abstract boolean checkCollision(int x, int y, IField fields[][]);
 
 	@Override
 	public void paint(Graphics g) {

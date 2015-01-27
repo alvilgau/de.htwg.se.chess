@@ -1,14 +1,23 @@
 package de.htwg.chess.model.impl;
 
+import java.util.List;
+
 import de.htwg.chess.model.IField;
 
-public class King extends Figure{
-	
+public class King extends Figure {
+
+	private static final int[][] MOVES = { { -1, 0 }, { -1, 1 }, { -1, -1 },
+			{ 0, 1 }, { 0, -1 }, { 1, 0 }, { 1, 1 }, { 1, -1 } };
+
 	/**
 	 * Constructs a new King object
-	 * @param x - the x position
-	 * @param y - the y position
-	 * @param team - the team of the figure
+	 * 
+	 * @param x
+	 *            - the x position
+	 * @param y
+	 *            - the y position
+	 * @param team
+	 *            - the team of the figure
 	 */
 	public King(int x, int y, Team team) {
 		setyPos(y);
@@ -16,36 +25,15 @@ public class King extends Figure{
 		loadImages("res/whiteKing.png", "res/blackKing.png");
 		setTeam(team);
 	}
-	
+
 	@Override
-	public boolean possibleMove(int x, int y, IField fields[][]) {
-		if(!super.possibleMove(x, y, fields)) {
-			return false;
-		}
-		else if(!checkCollision(x, y, fields)) {
-			return false;
-		}
-		
-		/* Absolute difference between old and new position */
-		int diffX = Math.abs(getxPos() - x);
-		int diffY = Math.abs(getyPos() - y); 
-		
-		/* Checks moves with radius of 1 */
-		if(diffX < 2 && diffY < 2 ) {
-			return true;
-		}
-		
-		return false;
+	public List<IField> getPossibleMoves(IField[][] fields) {
+		return moveValidator.simpleMoveValidation(this, fields, MOVES);
 	}
-	
-	@Override
-	protected boolean checkCollision(int x, int y, IField[][] fields) {
-		return possibleKill(x, y, fields);
-	}
-	
+
 	@Override
 	public String toString() {
 		return "K";
 	}
-	
+
 }

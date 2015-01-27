@@ -38,6 +38,9 @@ public class ChessController extends Observable implements IChessController {
 	private List<IFigure> figuresTeamWhite;
 	private List<IFigure> figuresTeamBlack;
 
+	// List that contains the possible moves of the current selected figure
+	private List<IField> possibleMoves;
+
 	// Checkmate checks if a king is mate or not
 	private Checkmate checkmate;
 
@@ -70,6 +73,7 @@ public class ChessController extends Observable implements IChessController {
 		fields = new IField[FIELD_SIZE][FIELD_SIZE];
 		checkmate = new Checkmate();
 		moveFigure = null;
+		possibleMoves = null;
 		select = false;
 		exchange = false;
 		gameover = false;
@@ -283,19 +287,22 @@ public class ChessController extends Observable implements IChessController {
 		if (fields[x][y].getFigur() != null
 				&& turn == fields[x][y].getFigur().getTeamNumber()) {
 			moveFigure = fields[x][y].getFigur();
-			select = true;
-			statusMessage = "One Figure is selected.";
+			possibleMoves = moveFigure.getPossibleMoves(fields);
+			if (!possibleMoves.isEmpty()) {
+				select = true;
+				statusMessage = "One Figure is selected.";
+				notifyObservers();
+			}
 		} else {
 			statusMessage = "No Figure is selected.";
 			select = false;
+			notifyObservers();
 		}
-
-		notifyObservers();
 	}
 
 	@Override
 	public void move(int x, int y) {
-		if (select && moveFigure.possibleMove(x, y, fields)) {
+		if (select && possibleMoves.contains(fields[x][y])) {
 			statusMessage = "Figure was moved successfully.";
 			int oldPosX = moveFigure.getxPos();
 			int oldPosY = moveFigure.getyPos();
@@ -416,6 +423,7 @@ public class ChessController extends Observable implements IChessController {
 	@Override
 	public void restart() {
 		moveFigure = null;
+		possibleMoves = null;
 		select = false;
 		exchange = false;
 		gameover = false;
