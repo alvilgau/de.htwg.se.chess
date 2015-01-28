@@ -20,7 +20,6 @@ public class Rook extends Figure {
 		setxPos(x);
 		setyPos(y);
 		setTeam(team);
-		loadImages("res/whiteRook.png", "res/blackRook.png");
 	}
 
 	@Override

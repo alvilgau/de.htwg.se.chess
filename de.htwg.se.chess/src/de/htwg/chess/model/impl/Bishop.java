@@ -20,7 +20,6 @@ public class Bishop extends Figure {
 		setyPos(y);
 		setxPos(x);
 		setTeam(team);
-		loadImages("res/whiteBishop.png", "res/blackBishop.png");
 	}
 
 	@Override

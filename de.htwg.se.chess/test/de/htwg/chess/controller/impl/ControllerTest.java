@@ -45,13 +45,6 @@ public class ControllerTest {
 	}
 
 	@Test
-	public void testSelectedPos() {
-		controller.select(0, 1);
-		assertEquals(68, controller.getSelectedPosX());
-		assertEquals(668, controller.getSelectedPosY());
-	}
-
-	@Test
 	public void testMove() {
 		// Correct move
 		controller.select(1, 0);
@@ -235,5 +228,12 @@ public class ControllerTest {
 
 		fieldValue = controller.getFieldValue(3, 3);
 		assertEquals(fieldValue, "empty");
+	}
+
+	@Test
+	public void testPossibleMoves() {
+		assertEquals(controller.getSelectedFigure(), null);
+		controller.select(0, 1);
+		assertEquals(controller.getPossibleMoves().isEmpty(), false);
 	}
 }

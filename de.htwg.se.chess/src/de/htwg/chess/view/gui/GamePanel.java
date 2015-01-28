@@ -1,34 +1,31 @@
 package de.htwg.chess.view.gui;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.IOException;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-import org.apache.log4j.Logger;
-import org.apache.log4j.helpers.Loader;
+import javax.swing.SwingConstants;
 
 import de.htwg.chess.controller.IChessController;
 
 public class GamePanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private static final int BORDER_SIZE = 50;
-	private static final int FIELD_SIZE = 100;
-	private static final int COLUMNS = 8;
-	private static final int DRAW_THICKNESS = 3;
-	private static final int IMAGE_GAP = 18;
 
-	private Logger logger = Logger.getLogger("de.htwg.chess.view.gui");
+	private static final String COLS = "ABCDEFGH";
+	private static final Color LIGHT = Color.decode("#E5CEA4");
+	private static final Color DARK = Color.decode("#A4785B");
+	private static final Color LIGHT_BLUE = Color.decode("#B8CFE5");
+
+	private JButton[][] chessField = new JButton[8][8];
 	private IChessController controller;
-	private Image field;
 
 	/**
 	 * Creates a GamePanel
@@ -38,63 +35,89 @@ public class GamePanel extends JPanel {
 	 */
 	public GamePanel(final IChessController controller) {
 		this.controller = controller;
-		setBackground(Color.WHITE);
+		setLayout(new GridLayout(0, 9));
 
-		this.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				try {
-					controller
-							.handleMovement(getMouseRow(e), getMouseColumn(e));
-				} catch (ArrayIndexOutOfBoundsException ex) {
-					logger.info("Out of field");
+		// create the single fields
+		for (int column = 0; column < chessField.length; column++) {
+			for (int row = 0; row < chessField.length; row++) {
+				JButton field = new JButton();
+				field.setMargin(new Insets(0, 0, 0, 0));
+				field.setActionCommand(row + ";" + column);
+
+				field.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						String[] pos = e.getActionCommand().split(";");
+						int x = Integer.parseInt(pos[0]);
+						int y = Integer.parseInt(pos[1]);
+						controller.handleMovement(x, y);
+					}
+				});
+
+				chessField[row][column] = field;
+			}
+		}
+
+		// setting field style
+		configureFields();
+
+		// add column descriptions
+		this.add(new JLabel(""));
+		for (int i = 0; i < chessField.length; i++) {
+			this.add(new JLabel(COLS.substring(i, i + 1), SwingConstants.CENTER));
+		}
+
+		// add fields
+		for (int column = chessField.length - 1; column >= 0; column--) {
+			for (int row = 0; row < chessField.length; row++) {
+				switch (row) {
+				case 0:
+					this.add(new JLabel("" + (column + 1),
+							SwingConstants.CENTER));
+				default:
+					this.add(chessField[row][column]);
 				}
 			}
-		});
-
-		try {
-			field = ImageIO.read(Loader.getResource("res/chessfield.jpg"));
-		} catch (IOException e) {
-			logger.info("Could not open chessfield.jpg");
 		}
 	}
 
 	/**
-	 * Calculates the row for the current mouse position
-	 * 
-	 * @param e
-	 *            - mouse event
-	 * @return row for the current mouse position
+	 * Setting field style e.g. background color
 	 */
-	private int getMouseRow(MouseEvent e) {
-		return (e.getX() + BORDER_SIZE) / FIELD_SIZE - 1;
+	private void configureFields() {
+		for (int column = 0; column < chessField.length; column++) {
+			for (int row = 0; row < chessField.length; row++) {
+				// setting background color
+				if ((column + row) % 2 == 1) {
+					chessField[row][column].setBackground(DARK);
+				} else {
+					chessField[row][column].setBackground(LIGHT);
+				}
+
+				// setting figure images
+				String imageName = controller.getFieldValue(row, column);
+				if (imageName.equals("empty")) {
+					chessField[row][column].setIcon(null);
+				} else {
+					chessField[row][column].setIcon(new ImageIcon("res/"
+							+ imageName + ".png"));
+				}
+			}
+		}
 	}
 
 	/**
-	 * Calculates the column for the current mouse position
-	 * 
-	 * @param e
-	 *            - mouse event
-	 * @return column for the current mouse position
+	 * Refreshes the game panel
 	 */
-	private int getMouseColumn(MouseEvent e) {
-		return COLUMNS - (e.getY() + BORDER_SIZE) / FIELD_SIZE;
-	}
-
-	@Override
-	public void paint(Graphics g) {
-		super.paint(g);
-		g.drawImage(field, 0, 0, null);
-		controller.paint(g);
-
-		Graphics2D g2 = (Graphics2D) g;
-		g2.setStroke(new BasicStroke(DRAW_THICKNESS));
-		g2.setColor(Color.BLACK);
-
+	public void refresh() {
+		configureFields();
 		if (controller.isSelect()) {
-			g2.drawRect(controller.getSelectedPosX() - IMAGE_GAP,
-					controller.getSelectedPosY() - IMAGE_GAP, FIELD_SIZE,
-					FIELD_SIZE);
+			int x = controller.getSelectedFigure().getxPos();
+			int y = controller.getSelectedFigure().getyPos();
+			chessField[x][y].setBackground(LIGHT_BLUE);
+			for (Point point : controller.getPossibleMoves()) {
+				chessField[point.x][point.y].setBackground(LIGHT_BLUE);
+			}
 		}
 	}
 }

@@ -23,7 +23,6 @@ public class Knight extends Figure {
 		setxPos(x);
 		setyPos(y);
 		setTeam(team);
-		loadImages("res/whiteKnight.png", "res/blackKnight.png");
 	}
 
 	@Override

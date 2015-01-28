@@ -78,10 +78,4 @@ public class BishopTest {
 		assertEquals("L", laeufer.toString());
 	}
 
-	@Test
-	public void testLoadImage() {
-		laeufer.loadImages("res/whiteBishop.png", "res/blackBishop.png");
-		laeufer.loadImages("wrong", "path");
-	}
-
 }

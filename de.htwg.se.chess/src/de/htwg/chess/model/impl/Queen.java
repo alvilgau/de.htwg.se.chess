@@ -20,7 +20,6 @@ public class Queen extends Figure {
 		setxPos(x);
 		setyPos(y);
 		setTeam(team);
-		loadImages("res/whiteQueen.png", "res/blackQueen.png");
 	}
 
 	@Override

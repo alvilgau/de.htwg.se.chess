@@ -1,7 +1,9 @@
 package de.htwg.chess.controller;
 
-import java.awt.Graphics;
+import java.awt.Point;
+import java.util.List;
 
+import de.htwg.chess.model.IFigure;
 import de.htwg.util.observer.IObservable;
 
 public interface IChessController extends IObservable {
@@ -42,16 +44,6 @@ public interface IChessController extends IObservable {
 	boolean isSelect();
 
 	/**
-	 * @return x position of the selected figure
-	 */
-	int getSelectedPosX();
-
-	/**
-	 * @return y position of the selected figure
-	 */
-	int getSelectedPosY();
-
-	/**
 	 * @return size of the playground
 	 */
 	int getFieldSize();
@@ -60,6 +52,11 @@ public interface IChessController extends IObservable {
 	 * @return the exchange status
 	 */
 	boolean getExchange();
+
+	/**
+	 * @return the selected figure
+	 */
+	IFigure getSelectedFigure();
 
 	/**
 	 * Handles the selection and movement of a figure
@@ -126,11 +123,9 @@ public interface IChessController extends IObservable {
 	String getFieldValue(int x, int y);
 
 	/**
-	 * Paints the figures on the playground
+	 * Gets the possible moves of the current selected figure
 	 * 
-	 * @param g
-	 *            - Graphics
+	 * @return list with the possible moves
 	 */
-	void paint(Graphics g);
-
+	List<Point> getPossibleMoves();
 }

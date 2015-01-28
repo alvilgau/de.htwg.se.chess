@@ -26,7 +26,6 @@ public class Pawn extends Figure {
 		setyPos(y);
 		setTeam(team);
 		this.startPosY = startPosY;
-		loadImages("res/whitePawn.png", "res/blackPawn.png");
 	}
 
 	@Override

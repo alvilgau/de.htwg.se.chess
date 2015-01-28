@@ -1,6 +1,5 @@
 package de.htwg.chess.model;
 
-import java.awt.Graphics;
 import java.util.List;
 
 public interface IFigure {
@@ -18,16 +17,6 @@ public interface IFigure {
 	 * @return y position
 	 */
 	int getyPos();
-
-	/**
-	 * @return x position of the figure image
-	 */
-	int getImgPosX();
-
-	/**
-	 * @return y position of the figure image
-	 */
-	int getImgPosY();
 
 	/**
 	 * Gets the team number of a figure
@@ -63,12 +52,4 @@ public interface IFigure {
 	 * @return a list of all possible moves for the figure
 	 */
 	List<IField> getPossibleMoves(IField[][] fields);
-
-	/**
-	 * Paints a figure
-	 * 
-	 * @param g
-	 *            - Graphics
-	 */
-	void paint(Graphics g);
 }

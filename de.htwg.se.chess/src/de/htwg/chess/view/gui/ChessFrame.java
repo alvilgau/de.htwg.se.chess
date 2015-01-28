@@ -15,37 +15,37 @@ import de.htwg.chess.controller.IChessController;
 import de.htwg.util.observer.Event;
 import de.htwg.util.observer.IObserver;
 
-public class ChessFrame extends JFrame implements IObserver{
+public class ChessFrame extends JFrame implements IObserver {
 
 	private static final long serialVersionUID = 1L;
-	private static final int WIDTH = 920;
-	private static final int HEIGHT = 1000;
-	
+
 	private IChessController controller;
 	private GamePanel gamePanel;
 	private StatusPanel statusPanel;
 	private InfoPane infoPane;
-	
+
 	/**
 	 * Creates a new GUI
-	 * @param controller - Chess Controller
+	 * 
+	 * @param controller
+	 *            - Chess Controller
 	 */
 	@Inject
 	public ChessFrame(final IChessController controller) {
 		this.controller = controller;
 		controller.addObserver(this);
-		
+
 		JMenuBar menuBar;
 		JMenu gameMenu;
 		JMenuItem newMenuItem, quitMenuItem;
-		
+
 		/**
 		 * Game Menu
 		 */
 		menuBar = new JMenuBar();
-		
+
 		gameMenu = new JMenu("Game");
-		
+
 		newMenuItem = new JMenuItem("New Game");
 		newMenuItem.addActionListener(new ActionListener() {
 			@Override
@@ -54,7 +54,7 @@ public class ChessFrame extends JFrame implements IObserver{
 			}
 		});
 		gameMenu.add(newMenuItem);
-		
+
 		quitMenuItem = new JMenuItem("Quit");
 		quitMenuItem.addActionListener(new ActionListener() {
 			@Override
@@ -64,23 +64,22 @@ public class ChessFrame extends JFrame implements IObserver{
 		});
 		gameMenu.add(quitMenuItem);
 		menuBar.add(gameMenu);
-		
+
 		constructPanels();
-		
+
 		/**
 		 * Add components to window
 		 */
 		setJMenuBar(menuBar);
 		add(statusPanel, BorderLayout.NORTH);
 		add(gamePanel, BorderLayout.CENTER);
-		
+
 		/**
 		 * Window settings
 		 */
 		setTitle("Chess");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(WIDTH, HEIGHT);
-		setResizable(false);
+		pack();
 		setVisible(true);
 	}
 
@@ -89,22 +88,23 @@ public class ChessFrame extends JFrame implements IObserver{
 	 */
 	private void constructPanels() {
 		statusPanel = new StatusPanel();
-		statusPanel.setStatusText(controller.getStatusMessage(), controller.getCheckmateMessage());
+		statusPanel.setStatusText(controller.getStatusMessage(),
+				controller.getCheckmateMessage());
 		statusPanel.setTurnText(controller.getTurnMessage());
 		gamePanel = new GamePanel(controller);
 		infoPane = new InfoPane(controller);
 	}
-	
+
 	@Override
 	public void update(Event e) {
-		statusPanel.setStatusText(controller.getStatusMessage(), controller.getCheckmateMessage());
+		statusPanel.setStatusText(controller.getStatusMessage(),
+				controller.getCheckmateMessage());
 		statusPanel.setTurnText(controller.getTurnMessage());
-		repaint();
-		
-		if(controller.isGameover()) {
+		gamePanel.refresh();
+
+		if (controller.isGameover()) {
 			infoPane.showGameOver(this);
-		}
-		else if(controller.getExchange()) {
+		} else if (controller.getExchange()) {
 			infoPane.handleExchange(this);
 		}
 	}

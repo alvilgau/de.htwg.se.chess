@@ -1,13 +1,5 @@
 package de.htwg.chess.model.impl;
 
-import java.awt.Graphics;
-import java.awt.Image;
-
-import javax.imageio.ImageIO;
-
-import org.apache.log4j.Logger;
-import org.apache.log4j.helpers.Loader;
-
 import de.htwg.chess.model.IField;
 import de.htwg.chess.model.IFigure;
 
@@ -19,17 +11,12 @@ public abstract class Figure implements IFigure {
 
 	static final int POS_MAX = 7;
 	static final int POS_MIN = 0;
-	private static final int IMG_FIELD_SIZE = 100;
-	private static final int IMG_GAP = 68;
 
-	private Logger logger = Logger.getLogger("de.htwg.chess.model.impl");
 	protected MoveValidator moveValidator = new MoveValidator();
 
 	private int xPos;
 	private int yPos;
 	private Team team;
-	private Image whiteFigure;
-	private Image blackFigure;
 
 	@Override
 	public int getxPos() {
@@ -39,16 +26,6 @@ public abstract class Figure implements IFigure {
 	@Override
 	public int getyPos() {
 		return yPos;
-	}
-
-	@Override
-	public int getImgPosX() {
-		return xPos * IMG_FIELD_SIZE + IMG_GAP;
-	}
-
-	@Override
-	public int getImgPosY() {
-		return (POS_MAX - yPos) * IMG_FIELD_SIZE + IMG_GAP;
 	}
 
 	/**
@@ -119,32 +96,6 @@ public abstract class Figure implements IFigure {
 		}
 
 		return fields[newXPos][newYPos];
-	}
-
-	/**
-	 * Loads the image for a figure
-	 * 
-	 * @param white
-	 *            - URI to the white image
-	 * @param black
-	 *            - URI to the black image
-	 */
-	protected void loadImages(String white, String black) {
-		try {
-			whiteFigure = ImageIO.read(Loader.getResource(white));
-			blackFigure = ImageIO.read(Loader.getResource(black));
-		} catch (Exception e) {
-			logger.info("Can't Read File");
-		}
-	}
-
-	@Override
-	public void paint(Graphics g) {
-		if (getTeam().equals("white")) {
-			g.drawImage(whiteFigure, getImgPosX(), getImgPosY(), null);
-		} else {
-			g.drawImage(blackFigure, getImgPosX(), getImgPosY(), null);
-		}
 	}
 
 }

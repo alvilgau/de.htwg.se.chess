@@ -22,7 +22,6 @@ public class King extends Figure {
 	public King(int x, int y, Team team) {
 		setyPos(y);
 		setxPos(x);
-		loadImages("res/whiteKing.png", "res/blackKing.png");
 		setTeam(team);
 	}
 

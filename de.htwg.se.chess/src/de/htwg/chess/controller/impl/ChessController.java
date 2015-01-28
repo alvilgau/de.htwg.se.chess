@@ -1,6 +1,6 @@
 package de.htwg.chess.controller.impl;
 
-import java.awt.Graphics;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -165,7 +165,7 @@ public class ChessController extends Observable implements IChessController {
 	private void initFieldsRest() {
 		for (int i = 2; i <= FIVE; i++) {
 			for (int k = 0; k <= SEVEN; k++) {
-				fields[k][i] = new Field();
+				fields[k][i] = new Field(k, i);
 			}
 		}
 	}
@@ -239,24 +239,13 @@ public class ChessController extends Observable implements IChessController {
 	}
 
 	@Override
-	public int getSelectedPosX() {
-		if (moveFigure == null) {
-			return 0;
-		}
-		return moveFigure.getImgPosX();
-	}
-
-	@Override
-	public int getSelectedPosY() {
-		if (moveFigure == null) {
-			return 0;
-		}
-		return moveFigure.getImgPosY();
-	}
-
-	@Override
 	public int getFieldSize() {
 		return FIELD_SIZE;
+	}
+
+	@Override
+	public IFigure getSelectedFigure() {
+		return moveFigure;
 	}
 
 	/**
@@ -466,14 +455,13 @@ public class ChessController extends Observable implements IChessController {
 	}
 
 	@Override
-	public void paint(Graphics g) {
-		for (IFigure fig : figuresTeamWhite) {
-			fig.paint(g);
+	public List<Point> getPossibleMoves() {
+		List<Point> possMoves = new ArrayList<Point>();
+		for (IField field : possibleMoves) {
+			Point p = new Point(field.getxPos(), field.getyPos());
+			possMoves.add(p);
 		}
-
-		for (IFigure fig : figuresTeamBlack) {
-			fig.paint(g);
-		}
+		return possMoves;
 	}
 
 }
