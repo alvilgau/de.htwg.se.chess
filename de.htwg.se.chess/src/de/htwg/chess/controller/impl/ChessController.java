@@ -72,16 +72,16 @@ public class ChessController extends Observable implements IChessController {
 	 */
 	@Inject
 	public ChessController() {
-		fields = new IField[FIELD_SIZE][FIELD_SIZE];
-		checkmate = new Checkmate();
-		moveFigure = null;
-		possibleMoves = null;
-		select = false;
-		exchange = false;
-		gameover = false;
-		turn = 0;
-		statusMessage = "Welcome to Chess";
-		turnMessage = "Team white's turn";
+		this.fields = new IField[FIELD_SIZE][FIELD_SIZE];
+		this.checkmate = new Checkmate();
+		this.moveFigure = null;
+		this.possibleMoves = null;
+		this.select = false;
+		this.exchange = false;
+		this.gameover = false;
+		this.turn = 0;
+		this.statusMessage = "Welcome to Chess";
+		this.turnMessage = "Team white's turn";
 		initTeamOne();
 		initTeamTwo();
 		initFieldsRest();
@@ -91,36 +91,42 @@ public class ChessController extends Observable implements IChessController {
 	 * Initialize the list and fields for Player 1
 	 */
 	private void initTeamOne() {
-		figuresTeamWhite = new ArrayList<IFigure>(LIST_SIZE);
+		this.figuresTeamWhite = new ArrayList<IFigure>(LIST_SIZE);
 
-		figuresTeamWhite.add(new King(FOUR, ZERO, Team.white));
-		fields[FOUR][ZERO] = new Field(true, figuresTeamWhite.get(ZERO));
+		this.figuresTeamWhite.add(new King(FOUR, ZERO, Team.white));
+		this.fields[FOUR][ZERO] = new Field(true,
+				this.figuresTeamWhite.get(ZERO));
 
-		figuresTeamWhite.add(new Rook(ZERO, ZERO, Team.white));
-		fields[ZERO][ZERO] = new Field(true, figuresTeamWhite.get(ONE));
+		this.figuresTeamWhite.add(new Rook(ZERO, ZERO, Team.white));
+		this.fields[ZERO][ZERO] = new Field(true,
+				this.figuresTeamWhite.get(ONE));
 
-		figuresTeamWhite.add(new Knight(ONE, ZERO, Team.white));
-		fields[ONE][ZERO] = new Field(true, figuresTeamWhite.get(TWO));
+		this.figuresTeamWhite.add(new Knight(ONE, ZERO, Team.white));
+		this.fields[ONE][ZERO] = new Field(true, this.figuresTeamWhite.get(TWO));
 
-		figuresTeamWhite.add(new Bishop(TWO, ZERO, Team.white));
-		fields[TWO][ZERO] = new Field(true, figuresTeamWhite.get(THREE));
+		this.figuresTeamWhite.add(new Bishop(TWO, ZERO, Team.white));
+		this.fields[TWO][ZERO] = new Field(true,
+				this.figuresTeamWhite.get(THREE));
 
-		figuresTeamWhite.add(new Queen(THREE, ZERO, Team.white));
-		fields[THREE][ZERO] = new Field(true, figuresTeamWhite.get(FOUR));
+		this.figuresTeamWhite.add(new Queen(THREE, ZERO, Team.white));
+		this.fields[THREE][ZERO] = new Field(true,
+				this.figuresTeamWhite.get(FOUR));
 
-		figuresTeamWhite.add(new Bishop(FIVE, ZERO, Team.white));
-		fields[FIVE][ZERO] = new Field(true, figuresTeamWhite.get(FIVE));
+		this.figuresTeamWhite.add(new Bishop(FIVE, ZERO, Team.white));
+		this.fields[FIVE][ZERO] = new Field(true,
+				this.figuresTeamWhite.get(FIVE));
 
-		figuresTeamWhite.add(new Knight(SIX, ZERO, Team.white));
-		fields[SIX][ZERO] = new Field(true, figuresTeamWhite.get(SIX));
+		this.figuresTeamWhite.add(new Knight(SIX, ZERO, Team.white));
+		this.fields[SIX][ZERO] = new Field(true, this.figuresTeamWhite.get(SIX));
 
-		figuresTeamWhite.add(new Rook(SEVEN, ZERO, Team.white));
-		fields[SEVEN][ZERO] = new Field(true, figuresTeamWhite.get(SEVEN));
+		this.figuresTeamWhite.add(new Rook(SEVEN, ZERO, Team.white));
+		this.fields[SEVEN][ZERO] = new Field(true,
+				this.figuresTeamWhite.get(SEVEN));
 
 		for (int i = 0; i <= SEVEN; i++) {
-			figuresTeamWhite.add(new Pawn(i, ONE, Team.white, ONE));
-			fields[i][ONE] = new Field(true, figuresTeamWhite.get(FIELD_SIZE
-					+ i));
+			this.figuresTeamWhite.add(new Pawn(i, ONE, Team.white, ONE));
+			this.fields[i][ONE] = new Field(true,
+					this.figuresTeamWhite.get(FIELD_SIZE + i));
 		}
 	}
 
@@ -128,36 +134,44 @@ public class ChessController extends Observable implements IChessController {
 	 * Initialize the list and fields for Player 2
 	 */
 	private void initTeamTwo() {
-		figuresTeamBlack = new ArrayList<IFigure>(LIST_SIZE);
+		this.figuresTeamBlack = new ArrayList<IFigure>(LIST_SIZE);
 
-		figuresTeamBlack.add(new King(FOUR, SEVEN, Team.black));
-		fields[FOUR][SEVEN] = new Field(true, figuresTeamBlack.get(ZERO));
+		this.figuresTeamBlack.add(new King(FOUR, SEVEN, Team.black));
+		this.fields[FOUR][SEVEN] = new Field(true,
+				this.figuresTeamBlack.get(ZERO));
 
-		figuresTeamBlack.add(new Rook(ZERO, SEVEN, Team.black));
-		fields[ZERO][SEVEN] = new Field(true, figuresTeamBlack.get(ONE));
+		this.figuresTeamBlack.add(new Rook(ZERO, SEVEN, Team.black));
+		this.fields[ZERO][SEVEN] = new Field(true,
+				this.figuresTeamBlack.get(ONE));
 
-		figuresTeamBlack.add(new Knight(ONE, SEVEN, Team.black));
-		fields[ONE][SEVEN] = new Field(true, figuresTeamBlack.get(TWO));
+		this.figuresTeamBlack.add(new Knight(ONE, SEVEN, Team.black));
+		this.fields[ONE][SEVEN] = new Field(true,
+				this.figuresTeamBlack.get(TWO));
 
-		figuresTeamBlack.add(new Bishop(TWO, SEVEN, Team.black));
-		fields[TWO][SEVEN] = new Field(true, figuresTeamBlack.get(THREE));
+		this.figuresTeamBlack.add(new Bishop(TWO, SEVEN, Team.black));
+		this.fields[TWO][SEVEN] = new Field(true,
+				this.figuresTeamBlack.get(THREE));
 
-		figuresTeamBlack.add(new Queen(THREE, SEVEN, Team.black));
-		fields[THREE][SEVEN] = new Field(true, figuresTeamBlack.get(FOUR));
+		this.figuresTeamBlack.add(new Queen(THREE, SEVEN, Team.black));
+		this.fields[THREE][SEVEN] = new Field(true,
+				this.figuresTeamBlack.get(FOUR));
 
-		figuresTeamBlack.add(new Bishop(FIVE, SEVEN, Team.black));
-		fields[FIVE][SEVEN] = new Field(true, figuresTeamBlack.get(FIVE));
+		this.figuresTeamBlack.add(new Bishop(FIVE, SEVEN, Team.black));
+		this.fields[FIVE][SEVEN] = new Field(true,
+				this.figuresTeamBlack.get(FIVE));
 
-		figuresTeamBlack.add(new Knight(SIX, SEVEN, Team.black));
-		fields[SIX][SEVEN] = new Field(true, figuresTeamBlack.get(SIX));
+		this.figuresTeamBlack.add(new Knight(SIX, SEVEN, Team.black));
+		this.fields[SIX][SEVEN] = new Field(true,
+				this.figuresTeamBlack.get(SIX));
 
-		figuresTeamBlack.add(new Rook(SEVEN, SEVEN, Team.black));
-		fields[SEVEN][SEVEN] = new Field(true, figuresTeamBlack.get(SEVEN));
+		this.figuresTeamBlack.add(new Rook(SEVEN, SEVEN, Team.black));
+		this.fields[SEVEN][SEVEN] = new Field(true,
+				this.figuresTeamBlack.get(SEVEN));
 
 		for (int i = 0; i <= SEVEN; i++) {
-			figuresTeamBlack.add(new Pawn(i, SIX, Team.black, SIX));
-			fields[i][SIX] = new Field(true, figuresTeamBlack.get(FIELD_SIZE
-					+ i));
+			this.figuresTeamBlack.add(new Pawn(i, SIX, Team.black, SIX));
+			this.fields[i][SIX] = new Field(true,
+					this.figuresTeamBlack.get(FIELD_SIZE + i));
 		}
 	}
 
@@ -167,7 +181,7 @@ public class ChessController extends Observable implements IChessController {
 	private void initFieldsRest() {
 		for (int i = 2; i <= FIVE; i++) {
 			for (int k = 0; k <= SEVEN; k++) {
-				fields[k][i] = new Field(k, i);
+				this.fields[k][i] = new Field(k, i);
 			}
 		}
 	}
@@ -176,12 +190,12 @@ public class ChessController extends Observable implements IChessController {
 	 * Selects the team for the next move
 	 */
 	private void nextTurn() {
-		if (turn == 0) {
-			turn = 1;
-			turnMessage = "Team black's turn";
+		if (this.turn == 0) {
+			this.turn = 1;
+			this.turnMessage = "Team black's turn";
 		} else {
-			turn = 0;
-			turnMessage = "Team white's turn";
+			this.turn = 0;
+			this.turnMessage = "Team white's turn";
 		}
 	}
 
@@ -189,15 +203,17 @@ public class ChessController extends Observable implements IChessController {
 	 * Updates the checkmate states of the kings
 	 */
 	private void updateCheckmate() {
-		checkmate.update(figuresTeamWhite, figuresTeamBlack, fields);
+		this.checkmate.update(this.figuresTeamWhite, this.figuresTeamBlack,
+				this.fields);
 
-		if (checkmate.isCheckWhite() && turn == 1) {
-			checkmate.nextStateWhite();
-		} else if (checkmate.isCheckBlack() && turn == 0) {
-			checkmate.nextStateBlack();
+		if (this.checkmate.isCheckWhite() && this.turn == 1) {
+			this.checkmate.nextStateWhite();
+		} else if (this.checkmate.isCheckBlack() && this.turn == 0) {
+			this.checkmate.nextStateBlack();
 		}
 
-		gameover = checkmate.isMate();
+		this.gameover = this.checkmate.isMateBlack()
+				|| this.checkmate.isMateWhite();
 	}
 
 	/**
@@ -212,37 +228,37 @@ public class ChessController extends Observable implements IChessController {
 
 	@Override
 	public boolean getExchange() {
-		return exchange;
+		return this.exchange;
 	}
 
 	@Override
 	public String getStatusMessage() {
-		return statusMessage;
+		return this.statusMessage;
 	}
 
 	@Override
 	public String getTurnMessage() {
-		return turnMessage;
+		return this.turnMessage;
 	}
 
 	@Override
 	public String getCheckmateMessage() {
-		return checkmate.getStatusMessage();
+		return this.checkmate.getStatusMessage();
 	}
 
 	@Override
 	public boolean isGameover() {
-		return gameover;
+		return this.gameover;
 	}
 
 	@Override
 	public boolean isSelect() {
-		return select;
+		return this.select;
 	}
 
 	@Override
 	public boolean isWhiteTurn() {
-		return turn == 0;
+		return this.turn == 0;
 	}
 
 	@Override
@@ -252,7 +268,32 @@ public class ChessController extends Observable implements IChessController {
 
 	@Override
 	public IFigure getSelectedFigure() {
-		return moveFigure;
+		return this.moveFigure;
+	}
+
+	@Override
+	public Checkmate getCheckmate() {
+		return this.checkmate;
+	}
+
+	@Override
+	public String getFieldValue(int x, int y) {
+		IFigure fig = this.fields[x][y].getFigur();
+		if (fig != null) {
+			return fig.getTeam() + fig;
+		} else {
+			return "empty";
+		}
+	}
+
+	@Override
+	public List<Point> getPossibleMoves() {
+		List<Point> possMoves = new ArrayList<Point>();
+		for (IField field : this.possibleMoves) {
+			Point p = new Point(field.getxPos(), field.getyPos());
+			possMoves.add(p);
+		}
+		return possMoves;
 	}
 
 	/**
@@ -267,11 +308,11 @@ public class ChessController extends Observable implements IChessController {
 
 	@Override
 	public void handleMovement(int x, int y) {
-		if (gameover || exchange) {
+		if (this.gameover || this.exchange) {
 			return;
 		}
 
-		if (!select) {
+		if (!this.select) {
 			select(x, y);
 		} else {
 			move(x, y);
@@ -280,156 +321,156 @@ public class ChessController extends Observable implements IChessController {
 
 	@Override
 	public void select(int x, int y) {
-		if (fields[x][y].getFigur() != null
-				&& turn == fields[x][y].getFigur().getTeamNumber()) {
-			moveFigure = fields[x][y].getFigur();
-			possibleMoves = moveFigure.getPossibleMoves(fields);
-			if (!possibleMoves.isEmpty()) {
-				select = true;
-				statusMessage = "One Figure is selected.";
+		if (this.fields[x][y].getFigur() != null
+				&& this.turn == this.fields[x][y].getFigur().getTeamNumber()) {
+			this.moveFigure = this.fields[x][y].getFigur();
+			this.possibleMoves = this.moveFigure.getPossibleMoves(this.fields);
+			if (!this.possibleMoves.isEmpty()) {
+				this.select = true;
+				this.statusMessage = "One Figure is selected.";
 				notifyObservers();
 			}
 		} else {
-			statusMessage = "No Figure is selected.";
-			select = false;
+			this.statusMessage = "No Figure is selected.";
+			this.select = false;
 			notifyObservers();
 		}
 	}
 
 	@Override
 	public void move(int x, int y) {
-		if (select && possibleMoves.contains(fields[x][y])) {
-			statusMessage = "Figure was moved successfully.";
-			int oldPosX = moveFigure.getxPos();
-			int oldPosY = moveFigure.getyPos();
+		if (this.select && this.possibleMoves.contains(this.fields[x][y])) {
+			this.statusMessage = "Figure was moved successfully.";
+			int oldPosX = this.moveFigure.getxPos();
+			int oldPosY = this.moveFigure.getyPos();
 
 			/* Removes the killed figure from the list */
-			figuresTeamBlack.remove(fields[x][y].getFigur());
-			figuresTeamWhite.remove(fields[x][y].getFigur());
+			this.figuresTeamBlack.remove(this.fields[x][y].getFigur());
+			this.figuresTeamWhite.remove(this.fields[x][y].getFigur());
 
 			/* Moves the figure */
-			fields[x][y].setFigur(moveFigure);
-			fields[x][y].setSet(true);
-			fields[oldPosX][oldPosY].clear();
-			exchange = moveFigure.move(x, y);
+			this.fields[x][y].setFigur(this.moveFigure);
+			this.fields[x][y].setSet(true);
+			this.fields[oldPosX][oldPosY].clear();
+			this.exchange = this.moveFigure.move(x, y);
 			nextTurn();
 
 			/* Checks for checkmate and game over */
 			updateCheckmate();
 		} else {
-			statusMessage = "Move failed. No Figure is selected.";
+			this.statusMessage = "Move failed. No Figure is selected.";
 		}
 
-		select = false;
+		this.select = false;
 		notifyObservers();
 	}
 
 	@Override
 	public void exchangeKnight() {
-		int xPos = moveFigure.getxPos();
-		int yPos = moveFigure.getyPos();
-		Team team = Team.valueOf(moveFigure.getTeam());
+		int xPos = this.moveFigure.getxPos();
+		int yPos = this.moveFigure.getyPos();
+		Team team = Team.valueOf(this.moveFigure.getTeam());
 
 		if (team == Team.black) {
-			figuresTeamBlack.remove(moveFigure);
-			figuresTeamBlack.add(new Knight(xPos, yPos, team));
-			fields[xPos][yPos].setFigur(figuresTeamBlack.get(figuresTeamBlack
-					.size() - 1));
+			this.figuresTeamBlack.remove(this.moveFigure);
+			this.figuresTeamBlack.add(new Knight(xPos, yPos, team));
+			this.fields[xPos][yPos].setFigur(this.figuresTeamBlack
+					.get(this.figuresTeamBlack.size() - 1));
 		} else {
-			figuresTeamWhite.remove(moveFigure);
-			figuresTeamWhite.add(new Knight(xPos, yPos, team));
-			fields[xPos][yPos].setFigur(figuresTeamWhite.get(figuresTeamWhite
-					.size() - 1));
+			this.figuresTeamWhite.remove(this.moveFigure);
+			this.figuresTeamWhite.add(new Knight(xPos, yPos, team));
+			this.fields[xPos][yPos].setFigur(this.figuresTeamWhite
+					.get(this.figuresTeamWhite.size() - 1));
 		}
 
-		exchange = false;
+		this.exchange = false;
 		updateCheckmate();
 		notifyObservers();
 	}
 
 	@Override
 	public void exchangeBishop() {
-		int xPos = moveFigure.getxPos();
-		int yPos = moveFigure.getyPos();
-		Team team = Team.valueOf(moveFigure.getTeam());
+		int xPos = this.moveFigure.getxPos();
+		int yPos = this.moveFigure.getyPos();
+		Team team = Team.valueOf(this.moveFigure.getTeam());
 
 		if (team == Team.black) {
-			figuresTeamBlack.remove(moveFigure);
-			figuresTeamBlack.add(new Bishop(xPos, yPos, team));
-			fields[xPos][yPos].setFigur(figuresTeamBlack.get(figuresTeamBlack
-					.size() - 1));
+			this.figuresTeamBlack.remove(this.moveFigure);
+			this.figuresTeamBlack.add(new Bishop(xPos, yPos, team));
+			this.fields[xPos][yPos].setFigur(this.figuresTeamBlack
+					.get(this.figuresTeamBlack.size() - 1));
 		} else {
-			figuresTeamWhite.remove(moveFigure);
-			figuresTeamWhite.add(new Bishop(xPos, yPos, team));
-			fields[xPos][yPos].setFigur(figuresTeamWhite.get(figuresTeamWhite
-					.size() - 1));
+			this.figuresTeamWhite.remove(this.moveFigure);
+			this.figuresTeamWhite.add(new Bishop(xPos, yPos, team));
+			this.fields[xPos][yPos].setFigur(this.figuresTeamWhite
+					.get(this.figuresTeamWhite.size() - 1));
 		}
 
-		exchange = false;
+		this.exchange = false;
 		updateCheckmate();
 		notifyObservers();
 	}
 
 	@Override
 	public void exchangeRook() {
-		int xPos = moveFigure.getxPos();
-		int yPos = moveFigure.getyPos();
-		Team team = Team.valueOf(moveFigure.getTeam());
+		int xPos = this.moveFigure.getxPos();
+		int yPos = this.moveFigure.getyPos();
+		Team team = Team.valueOf(this.moveFigure.getTeam());
 
 		if (team == Team.black) {
-			figuresTeamBlack.remove(moveFigure);
-			figuresTeamBlack.add(new Rook(xPos, yPos, team));
-			fields[xPos][yPos].setFigur(figuresTeamBlack.get(figuresTeamBlack
-					.size() - 1));
+			this.figuresTeamBlack.remove(this.moveFigure);
+			this.figuresTeamBlack.add(new Rook(xPos, yPos, team));
+			this.fields[xPos][yPos].setFigur(this.figuresTeamBlack
+					.get(this.figuresTeamBlack.size() - 1));
 		} else {
-			figuresTeamWhite.remove(moveFigure);
-			figuresTeamWhite.add(new Rook(xPos, yPos, team));
-			fields[xPos][yPos].setFigur(figuresTeamWhite.get(figuresTeamWhite
-					.size() - 1));
+			this.figuresTeamWhite.remove(this.moveFigure);
+			this.figuresTeamWhite.add(new Rook(xPos, yPos, team));
+			this.fields[xPos][yPos].setFigur(this.figuresTeamWhite
+					.get(this.figuresTeamWhite.size() - 1));
 		}
 
-		exchange = false;
+		this.exchange = false;
 		updateCheckmate();
 		notifyObservers();
 	}
 
 	@Override
 	public void exchangeQueen() {
-		int xPos = moveFigure.getxPos();
-		int yPos = moveFigure.getyPos();
-		Team team = Team.valueOf(moveFigure.getTeam());
+		int xPos = this.moveFigure.getxPos();
+		int yPos = this.moveFigure.getyPos();
+		Team team = Team.valueOf(this.moveFigure.getTeam());
 
 		if (team == Team.black) {
-			figuresTeamBlack.remove(moveFigure);
-			figuresTeamBlack.add(new Queen(xPos, yPos, team));
-			fields[xPos][yPos].setFigur(figuresTeamBlack.get(figuresTeamBlack
-					.size() - 1));
+			this.figuresTeamBlack.remove(this.moveFigure);
+			this.figuresTeamBlack.add(new Queen(xPos, yPos, team));
+			this.fields[xPos][yPos].setFigur(this.figuresTeamBlack
+					.get(this.figuresTeamBlack.size() - 1));
 		} else {
-			figuresTeamWhite.remove(moveFigure);
-			figuresTeamWhite.add(new Queen(xPos, yPos, team));
-			fields[xPos][yPos].setFigur(figuresTeamWhite.get(figuresTeamWhite
-					.size() - 1));
+			this.figuresTeamWhite.remove(this.moveFigure);
+			this.figuresTeamWhite.add(new Queen(xPos, yPos, team));
+			this.fields[xPos][yPos].setFigur(this.figuresTeamWhite
+					.get(this.figuresTeamWhite.size() - 1));
 		}
 
-		exchange = false;
+		this.exchange = false;
 		updateCheckmate();
 		notifyObservers();
 	}
 
 	@Override
 	public void restart() {
-		moveFigure = null;
-		possibleMoves = null;
-		select = false;
-		exchange = false;
-		gameover = false;
-		statusMessage = "Welcome to Chess";
-		turnMessage = "Team white's turn";
-		turn = 0;
+		this.moveFigure = null;
+		this.possibleMoves = null;
+		this.select = false;
+		this.exchange = false;
+		this.gameover = false;
+		this.statusMessage = "Welcome to Chess";
+		this.turnMessage = "Team white's turn";
+		this.turn = 0;
 		initTeamOne();
 		initTeamTwo();
 		initFieldsRest();
-		checkmate.reset();
+		this.checkmate.reset();
 		notifyObservers();
 	}
 
@@ -442,7 +483,7 @@ public class ChessController extends Observable implements IChessController {
 		for (int i = SEVEN; i >= ZERO; i--) {
 			sb.append("\n" + (i + 1) + "|  ");
 			for (int k = 0; k <= SEVEN; k++) {
-				sb.append(fields[k][i] + "  ");
+				sb.append(this.fields[k][i] + "  ");
 			}
 			sb.append("|");
 		}
@@ -462,26 +503,6 @@ public class ChessController extends Observable implements IChessController {
 		obj.put("exchange", getExchange());
 		obj.put("gameover", isGameover());
 		return obj.toJSONString();
-	}
-
-	@Override
-	public String getFieldValue(int x, int y) {
-		IFigure fig = fields[x][y].getFigur();
-		if (fig != null) {
-			return fig.getTeam() + fig;
-		} else {
-			return "empty";
-		}
-	}
-
-	@Override
-	public List<Point> getPossibleMoves() {
-		List<Point> possMoves = new ArrayList<Point>();
-		for (IField field : possibleMoves) {
-			Point p = new Point(field.getxPos(), field.getyPos());
-			possMoves.add(p);
-		}
-		return possMoves;
 	}
 
 }

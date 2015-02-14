@@ -14,226 +14,239 @@ public class ControllerTest {
 
 	@Before
 	public void setUp() {
-		controller = new ChessController();
-		start = controller.toString();
+		this.controller = new ChessController();
+		this.start = this.controller.toString();
 	}
 
 	@Test
 	public void testToString() {
-		assertTrue(controller.toString().contains("T  P  L  D  K  L  P  T  "));
+		assertTrue(this.controller.toString().contains(
+				"T  P  L  D  K  L  P  T  "));
 	}
 
 	@Test
 	public void testSetExchange() {
-		assertFalse(controller.getExchange());
-		controller.setExchange(true);
-		assertTrue(controller.getExchange());
+		assertFalse(this.controller.getExchange());
+		this.controller.setExchange(true);
+		assertTrue(this.controller.getExchange());
 	}
 
 	@Test
 	public void testSelect() {
 		// Invalid select
-		controller.select(0, 3);
-		controller.move(3, 3);
-		assertFalse(controller.isSelect());
-		assertTrue(start.equals(controller.toString()));
+		this.controller.select(0, 3);
+		this.controller.move(3, 3);
+		assertFalse(this.controller.isSelect());
+		assertTrue(this.start.equals(this.controller.toString()));
 
 		// Invalid select
-		controller.select(0, 6);
-		controller.move(0, 5);
-		assertTrue(start.equals(controller.toString()));
+		this.controller.select(0, 6);
+		this.controller.move(0, 5);
+		assertTrue(this.start.equals(this.controller.toString()));
 	}
 
 	@Test
 	public void testMove() {
 		// Correct move
-		controller.select(1, 0);
-		controller.move(2, 2);
-		assertFalse(start.equals(controller.toString()));
-		start = controller.toString();
+		assertTrue(this.controller.isWhiteTurn());
+		this.controller.select(1, 0);
+		this.controller.move(2, 2);
+		assertFalse(this.start.equals(this.controller.toString()));
+		this.start = this.controller.toString();
 
 		// Correct move
-		controller.select(0, 6);
-		controller.move(0, 5);
-		assertFalse(start.equals(controller.toString()));
-		start = controller.toString();
+		assertFalse(this.controller.isWhiteTurn());
+		this.controller.select(0, 6);
+		this.controller.move(0, 5);
+		assertFalse(this.start.equals(this.controller.toString()));
+		this.start = this.controller.toString();
 
 		// Invalid move
-		controller.select(0, 1);
-		controller.move(3, 3);
-		assertTrue(start.equals(controller.toString()));
+		this.controller.select(0, 1);
+		this.controller.move(3, 3);
+		assertTrue(this.start.equals(this.controller.toString()));
 	}
 
 	@Test
 	public void testRestart() {
-		controller.select(1, 0);
-		controller.move(2, 2);
-		assertFalse(start.equals(controller.toString()));
+		this.controller.select(1, 0);
+		this.controller.move(2, 2);
+		assertFalse(this.start.equals(this.controller.toString()));
 
 		// Restart
-		controller.restart();
-		assertEquals(start, controller.toString());
+		this.controller.restart();
+		assertEquals(this.start, this.controller.toString());
 	}
 
 	@Test
 	public void testHandleMovement() {
 		// Select
-		controller.handleMovement(0, 1);
+		this.controller.handleMovement(0, 1);
 		// Move
-		controller.handleMovement(0, 3);
-		assertFalse(start.equals(controller.toString()));
-		start = controller.toString();
+		this.controller.handleMovement(0, 3);
+		assertFalse(this.start.equals(this.controller.toString()));
+		this.start = this.controller.toString();
 
 		// Fail handle because of exchange
-		controller.setExchange(true);
-		controller.handleMovement(0, 3);
-		controller.handleMovement(0, 5);
-		assertTrue(start.equals(controller.toString()));
-		controller.setExchange(false);
+		this.controller.setExchange(true);
+		this.controller.handleMovement(0, 3);
+		this.controller.handleMovement(0, 5);
+		assertTrue(this.start.equals(this.controller.toString()));
+		this.controller.setExchange(false);
 
 		// Fail handle because of game over
-		controller.setGameover(true);
-		controller.handleMovement(0, 3);
-		controller.handleMovement(0, 5);
-		assertTrue(start.equals(controller.toString()));
+		this.controller.setGameover(true);
+		this.controller.handleMovement(0, 3);
+		this.controller.handleMovement(0, 5);
+		assertTrue(this.start.equals(this.controller.toString()));
 	}
 
 	@Test
 	public void testExchange() {
-		controller.select(0, 1);
-		controller.move(0, 3);
-		controller.select(0, 7);
+		this.controller.select(0, 1);
+		this.controller.move(0, 3);
+		this.controller.select(0, 7);
 
 		// Exchange with Knight
-		controller.exchangeKnight();
-		assertTrue(controller.toString().contains("P  P  L  D  K  L  P  T  "));
+		this.controller.exchangeKnight();
+		assertTrue(this.controller.toString().contains(
+				"P  P  L  D  K  L  P  T  "));
 
 		// Exchange with Bishop
-		controller.exchangeBishop();
-		assertTrue(controller.toString().contains("L  P  L  D  K  L  P  T  "));
+		this.controller.exchangeBishop();
+		assertTrue(this.controller.toString().contains(
+				"L  P  L  D  K  L  P  T  "));
 
 		// Exchange with Rook
-		controller.exchangeRook();
-		assertTrue(controller.toString().contains("T  P  L  D  K  L  P  T  "));
+		this.controller.exchangeRook();
+		assertTrue(this.controller.toString().contains(
+				"T  P  L  D  K  L  P  T  "));
 
 		// Exchange with Queen
-		controller.exchangeQueen();
-		assertTrue(controller.toString().contains("D  P  L  D  K  L  P  T  "));
+		this.controller.exchangeQueen();
+		assertTrue(this.controller.toString().contains(
+				"D  P  L  D  K  L  P  T  "));
 	}
 
 	@Test
 	public void testGetStatusMessage() {
-		assertEquals("Welcome to Chess", controller.getStatusMessage());
+		assertEquals("Welcome to Chess", this.controller.getStatusMessage());
 	}
 
 	@Test
 	public void testGetFieldSize() {
-		assertEquals(8, controller.getFieldSize());
+		assertEquals(8, this.controller.getFieldSize());
 	}
 
 	@Test
 	public void testUpdateCheckmateWhite() {
 		// Move team white
-		controller.select(4, 1);
-		controller.move(4, 3);
+		this.controller.select(4, 1);
+		this.controller.move(4, 3);
 
 		// Move team black
-		controller.select(3, 6);
-		controller.move(3, 4);
+		this.controller.select(3, 6);
+		this.controller.move(3, 4);
 
 		// Move team white
-		controller.select(4, 3);
-		controller.move(4, 4);
+		this.controller.select(4, 3);
+		this.controller.move(4, 4);
 
 		// Move team black
-		controller.select(3, 7);
-		controller.move(3, 5);
+		this.controller.select(3, 7);
+		this.controller.move(3, 5);
 
 		// Move team white
-		controller.select(0, 1);
-		controller.move(0, 2);
+		this.controller.select(0, 1);
+		this.controller.move(0, 2);
 
 		// Move team black
-		controller.select(3, 5);
-		controller.move(4, 4);
+		this.controller.select(3, 5);
+		this.controller.move(4, 4);
 
 		// Move team white
-		controller.select(5, 0);
-		controller.move(4, 1);
+		this.controller.select(5, 0);
+		this.controller.move(4, 1);
 
 		// Move team black
-		controller.select(0, 6);
-		controller.move(0, 5);
-		assertFalse(controller.isGameover());
+		this.controller.select(0, 6);
+		this.controller.move(0, 5);
+		assertFalse(this.controller.isGameover());
 
 		// Move team white
-		controller.select(4, 1);
-		controller.move(3, 2);
-		assertTrue(controller.isGameover());
+		this.controller.select(4, 1);
+		this.controller.move(3, 2);
+		assertTrue(this.controller.isGameover());
 	}
 
 	@Test
 	public void testUpdateCheckmateBlack() {
 		// Move team white
-		controller.select(3, 1);
-		controller.move(3, 3);
+		this.controller.select(3, 1);
+		this.controller.move(3, 3);
 
 		// Move team black
-		controller.select(4, 6);
-		controller.move(4, 4);
+		this.controller.select(4, 6);
+		this.controller.move(4, 4);
 
 		// Move team white
-		controller.select(3, 0);
-		controller.move(3, 2);
+		this.controller.select(3, 0);
+		this.controller.move(3, 2);
 
 		// Move team black
-		controller.select(4, 4);
-		controller.move(4, 3);
+		this.controller.select(4, 4);
+		this.controller.move(4, 3);
 
 		// Move team white
-		controller.select(3, 2);
-		controller.move(4, 3);
+		this.controller.select(3, 2);
+		this.controller.move(4, 3);
 
 		// Move team black
-		controller.select(3, 7);
-		controller.move(4, 6);
+		this.controller.select(3, 7);
+		this.controller.move(4, 6);
 
 		// Move team white
-		controller.select(0, 1);
-		controller.move(0, 2);
-		assertFalse(controller.isGameover());
+		this.controller.select(0, 1);
+		this.controller.move(0, 2);
+		assertFalse(this.controller.isGameover());
 
 		// Move team black
-		controller.select(4, 6);
-		controller.move(5, 5);
-		assertTrue(controller.isGameover());
+		this.controller.select(4, 6);
+		this.controller.move(5, 5);
+		assertTrue(this.controller.isGameover());
 	}
 
 	@Test
 	public void testGetTurnMessage() {
-		assertEquals("Team white's turn", controller.getTurnMessage());
+		assertEquals("Team white's turn", this.controller.getTurnMessage());
+	}
+
+	@Test
+	public void testToJson() {
+		String json = "{\"checkmateMessage\":\"\",\"select\":false,\"turnMessage\":\"Team white's turn\",\"exchange\":false,\"statusMessage\":\"Welcome to Chess\",\"gameover\":false}";
+		assertEquals(json, this.controller.toJson());
 	}
 
 	@Test
 	public void testGetFieldValue() {
 		String fieldValue;
-		fieldValue = controller.getFieldValue(0, 0);
+		fieldValue = this.controller.getFieldValue(0, 0);
 		assertEquals(fieldValue, "whiteT");
 
-		fieldValue = controller.getFieldValue(0, 1);
+		fieldValue = this.controller.getFieldValue(0, 1);
 		assertEquals(fieldValue, "whiteB");
 
-		fieldValue = controller.getFieldValue(1, 7);
+		fieldValue = this.controller.getFieldValue(1, 7);
 		assertEquals(fieldValue, "blackP");
 
-		fieldValue = controller.getFieldValue(3, 3);
+		fieldValue = this.controller.getFieldValue(3, 3);
 		assertEquals(fieldValue, "empty");
 	}
 
 	@Test
 	public void testPossibleMoves() {
-		assertEquals(controller.getSelectedFigure(), null);
-		controller.select(0, 1);
-		assertEquals(controller.getPossibleMoves().isEmpty(), false);
+		assertEquals(this.controller.getSelectedFigure(), null);
+		this.controller.select(0, 1);
+		assertEquals(this.controller.getPossibleMoves().isEmpty(), false);
 	}
 }

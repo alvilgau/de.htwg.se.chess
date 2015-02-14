@@ -23,56 +23,62 @@ public class Checkmate {
 	 * Constructs a new Checkmate object
 	 */
 	public Checkmate() {
-		checkmateWhite = CheckMate.save;
-		checkmateBlack = CheckMate.save;
-		statusMessageWhite = "";
-		statusMessageBlack = "";
+		this.checkmateWhite = CheckMate.save;
+		this.checkmateBlack = CheckMate.save;
+		this.statusMessageWhite = "";
+		this.statusMessageBlack = "";
 	}
 
 	/**
 	 * Sets all attributes to the default value
 	 */
 	public void reset() {
-		checkmateWhite = CheckMate.save;
-		checkmateBlack = CheckMate.save;
-		statusMessageWhite = "";
-		statusMessageBlack = "";
+		this.checkmateWhite = CheckMate.save;
+		this.checkmateBlack = CheckMate.save;
+		this.statusMessageWhite = "";
+		this.statusMessageBlack = "";
 	}
 
 	/**
 	 * @return true if at least one king is mate
 	 */
-	public boolean isMate() {
-		return checkmateWhite == CheckMate.mate
-				|| checkmateBlack == CheckMate.mate;
+	public boolean isMateWhite() {
+		return this.checkmateWhite == CheckMate.mate;
+	}
+
+	/**
+	 * @return true if at least one king is mate
+	 */
+	public boolean isMateBlack() {
+		return this.checkmateBlack == CheckMate.mate;
 	}
 
 	/**
 	 * @return true if the white king is in a check
 	 */
 	public boolean isCheckWhite() {
-		return checkmateWhite == CheckMate.check;
+		return this.checkmateWhite == CheckMate.check;
 	}
 
 	/**
 	 * @return true if the black king is in a check
 	 */
 	public boolean isCheckBlack() {
-		return checkmateBlack == CheckMate.check;
+		return this.checkmateBlack == CheckMate.check;
 	}
 
 	/**
 	 * Switches to next state of the white king
 	 */
 	public void nextStateWhite() {
-		checkmateWhite = checkmateWhite.next();
+		this.checkmateWhite = this.checkmateWhite.next();
 	}
 
 	/**
 	 * Switches to next state of the black king
 	 */
 	public void nextStateBlack() {
-		checkmateBlack = checkmateBlack.next();
+		this.checkmateBlack = this.checkmateBlack.next();
 	}
 
 	/**
@@ -116,7 +122,7 @@ public class Checkmate {
 		}
 
 		if (!updated) {
-			checkmateWhite = CheckMate.save;
+			this.checkmateWhite = CheckMate.save;
 		}
 	}
 
@@ -145,7 +151,7 @@ public class Checkmate {
 		}
 
 		if (!updated) {
-			checkmateBlack = CheckMate.save;
+			this.checkmateBlack = CheckMate.save;
 		}
 	}
 
@@ -155,31 +161,31 @@ public class Checkmate {
 	 * @return status message of the kings
 	 */
 	public String getStatusMessage() {
-		switch (checkmateWhite) {
+		switch (this.checkmateWhite) {
 		case save:
-			statusMessageWhite = "";
+			this.statusMessageWhite = "";
 			break;
 		case check:
-			statusMessageWhite = "White King is in a check! ";
+			this.statusMessageWhite = "White King is in a check! ";
 			break;
 		default:
-			statusMessageWhite = "White King is mate. Team Black has won. - Game Over! ";
+			this.statusMessageWhite = "White King is mate. Team Black has won. - Game Over! ";
 			break;
 		}
 
-		switch (checkmateBlack) {
+		switch (this.checkmateBlack) {
 		case save:
-			statusMessageBlack = "";
+			this.statusMessageBlack = "";
 			break;
 		case check:
-			statusMessageBlack = "Black King is in a check!";
+			this.statusMessageBlack = "Black King is in a check!";
 			break;
 		default:
-			statusMessageBlack = "Black King is mate. Team White has won. - Game Over!";
+			this.statusMessageBlack = "Black King is mate. Team White has won. - Game Over!";
 			break;
 		}
 
-		return statusMessageWhite + "" + statusMessageBlack;
+		return this.statusMessageWhite + "" + this.statusMessageBlack;
 	}
 
 }
