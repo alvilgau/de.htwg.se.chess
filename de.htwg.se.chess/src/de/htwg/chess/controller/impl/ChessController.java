@@ -4,6 +4,8 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.simple.JSONObject;
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -239,6 +241,11 @@ public class ChessController extends Observable implements IChessController {
 	}
 
 	@Override
+	public boolean isWhiteTurn() {
+		return turn == 0;
+	}
+
+	@Override
 	public int getFieldSize() {
 		return FIELD_SIZE;
 	}
@@ -442,6 +449,19 @@ public class ChessController extends Observable implements IChessController {
 
 		sb.append("\n-+--------------------------+");
 		return sb.toString();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public String toJson() {
+		JSONObject obj = new JSONObject();
+		obj.put("statusMessage", getStatusMessage());
+		obj.put("checkmateMessage", getCheckmateMessage());
+		obj.put("turnMessage", getTurnMessage());
+		obj.put("select", isSelect());
+		obj.put("exchange", getExchange());
+		obj.put("gameover", isGameover());
+		return obj.toJSONString();
 	}
 
 	@Override

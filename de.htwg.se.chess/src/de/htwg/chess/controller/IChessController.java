@@ -54,6 +54,11 @@ public interface IChessController extends IObservable {
 	boolean getExchange();
 
 	/**
+	 * @return true if team whites turn
+	 */
+	boolean isWhiteTurn();
+
+	/**
 	 * @return the selected figure
 	 */
 	IFigure getSelectedFigure();
@@ -112,6 +117,13 @@ public interface IChessController extends IObservable {
 	 * Exchanges the Pawn with a new Queen
 	 */
 	void exchangeQueen();
+
+	/**
+	 * Converts the controller to JSON
+	 * 
+	 * @return controller with JSON
+	 */
+	String toJson();
 
 	/**
 	 * @param x
