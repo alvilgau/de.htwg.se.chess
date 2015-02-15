@@ -3,6 +3,7 @@ package de.htwg.chess.controller.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import com.google.inject.Inject;
@@ -496,14 +497,20 @@ public class ChessController extends Observable implements IChessController {
 	@Override
 	public String toJson() {
 		JSONObject obj = new JSONObject();
+		JSONArray array = new JSONArray();
 		obj.put("statusMessage", getStatusMessage());
 		obj.put("checkmateMessage", getCheckmateMessage());
 		obj.put("turnMessage", getTurnMessage());
 		obj.put("select", isSelect());
 		obj.put("exchange", getExchange());
 		obj.put("gameover", isGameover());
-		obj.put("possMoves", getPossibleMoves());
+		for (int[] move : getPossibleMoves()) {
+			JSONArray arr = new JSONArray();
+			arr.add(move[0]);
+			arr.add(move[1]);
+			array.add(arr);
+		}
+		obj.put("possMoves", array);
 		return obj.toJSONString();
 	}
-
 }
