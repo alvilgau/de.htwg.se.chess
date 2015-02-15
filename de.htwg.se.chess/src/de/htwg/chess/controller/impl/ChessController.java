@@ -1,6 +1,5 @@
 package de.htwg.chess.controller.impl;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,7 +74,7 @@ public class ChessController extends Observable implements IChessController {
 		this.fields = new IField[FIELD_SIZE][FIELD_SIZE];
 		this.checkmate = new Checkmate();
 		this.moveFigure = null;
-		this.possibleMoves = null;
+		this.possibleMoves = new ArrayList<>();
 		this.select = false;
 		this.exchange = false;
 		this.gameover = false;
@@ -287,12 +286,13 @@ public class ChessController extends Observable implements IChessController {
 	}
 
 	@Override
-	public List<Point> getPossibleMoves() {
-		List<Point> possMoves = new ArrayList<Point>();
-		for (IField field : this.possibleMoves) {
-			Point p = new Point(field.getxPos(), field.getyPos());
-			possMoves.add(p);
+	public int[][] getPossibleMoves() {
+		int possMoves[][] = new int[this.possibleMoves.size()][2];
+		for (int i = 0; i < this.possibleMoves.size(); i++) {
+			possMoves[i][0] = this.possibleMoves.get(i).getxPos();
+			possMoves[i][1] = this.possibleMoves.get(i).getyPos();
 		}
+
 		return possMoves;
 	}
 
@@ -502,6 +502,7 @@ public class ChessController extends Observable implements IChessController {
 		obj.put("select", isSelect());
 		obj.put("exchange", getExchange());
 		obj.put("gameover", isGameover());
+		obj.put("possMoves", getPossibleMoves());
 		return obj.toJSONString();
 	}
 

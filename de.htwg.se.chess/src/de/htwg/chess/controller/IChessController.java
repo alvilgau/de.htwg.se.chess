@@ -1,8 +1,5 @@
 package de.htwg.chess.controller;
 
-import java.awt.Point;
-import java.util.List;
-
 import de.htwg.chess.controller.impl.Checkmate;
 import de.htwg.chess.model.IFigure;
 import de.htwg.util.observer.IObservable;
@@ -138,9 +135,9 @@ public interface IChessController extends IObservable {
 	/**
 	 * Gets the possible moves of the current selected figure
 	 * 
-	 * @return list with the possible moves
+	 * @return array with the possible moves
 	 */
-	List<Point> getPossibleMoves();
+	int[][] getPossibleMoves();
 
 	/**
 	 * Gets the check mate status of the game

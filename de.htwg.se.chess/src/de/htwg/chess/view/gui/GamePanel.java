@@ -3,7 +3,6 @@ package de.htwg.chess.view.gui;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.Insets;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -38,8 +37,8 @@ public class GamePanel extends JPanel {
 		setLayout(new GridLayout(0, 9));
 
 		// create the single fields
-		for (int column = 0; column < chessField.length; column++) {
-			for (int row = 0; row < chessField.length; row++) {
+		for (int column = 0; column < this.chessField.length; column++) {
+			for (int row = 0; row < this.chessField.length; row++) {
 				JButton field = new JButton();
 				field.setMargin(new Insets(0, 0, 0, 0));
 				field.setActionCommand(row + ";" + column);
@@ -54,7 +53,7 @@ public class GamePanel extends JPanel {
 					}
 				});
 
-				chessField[row][column] = field;
+				this.chessField[row][column] = field;
 			}
 		}
 
@@ -63,19 +62,19 @@ public class GamePanel extends JPanel {
 
 		// add column descriptions
 		this.add(new JLabel(""));
-		for (int i = 0; i < chessField.length; i++) {
+		for (int i = 0; i < this.chessField.length; i++) {
 			this.add(new JLabel(COLS.substring(i, i + 1), SwingConstants.CENTER));
 		}
 
 		// add fields
-		for (int column = chessField.length - 1; column >= 0; column--) {
-			for (int row = 0; row < chessField.length; row++) {
+		for (int column = this.chessField.length - 1; column >= 0; column--) {
+			for (int row = 0; row < this.chessField.length; row++) {
 				switch (row) {
 				case 0:
 					this.add(new JLabel("" + (column + 1),
 							SwingConstants.CENTER));
 				default:
-					this.add(chessField[row][column]);
+					this.add(this.chessField[row][column]);
 				}
 			}
 		}
@@ -85,21 +84,21 @@ public class GamePanel extends JPanel {
 	 * Setting field style e.g. background color
 	 */
 	private void configureFields() {
-		for (int column = 0; column < chessField.length; column++) {
-			for (int row = 0; row < chessField.length; row++) {
+		for (int column = 0; column < this.chessField.length; column++) {
+			for (int row = 0; row < this.chessField.length; row++) {
 				// setting background color
 				if ((column + row) % 2 == 1) {
-					chessField[row][column].setBackground(DARK);
+					this.chessField[row][column].setBackground(DARK);
 				} else {
-					chessField[row][column].setBackground(LIGHT);
+					this.chessField[row][column].setBackground(LIGHT);
 				}
 
 				// setting figure images
-				String imageName = controller.getFieldValue(row, column);
+				String imageName = this.controller.getFieldValue(row, column);
 				if (imageName.equals("empty")) {
-					chessField[row][column].setIcon(null);
+					this.chessField[row][column].setIcon(null);
 				} else {
-					chessField[row][column].setIcon(new ImageIcon("res/"
+					this.chessField[row][column].setIcon(new ImageIcon("res/"
 							+ imageName + ".png"));
 				}
 			}
@@ -111,12 +110,13 @@ public class GamePanel extends JPanel {
 	 */
 	public void refresh() {
 		configureFields();
-		if (controller.isSelect()) {
-			int x = controller.getSelectedFigure().getxPos();
-			int y = controller.getSelectedFigure().getyPos();
-			chessField[x][y].setBackground(LIGHT_BLUE);
-			for (Point point : controller.getPossibleMoves()) {
-				chessField[point.x][point.y].setBackground(LIGHT_BLUE);
+		if (this.controller.isSelect()) {
+			int x = this.controller.getSelectedFigure().getxPos();
+			int y = this.controller.getSelectedFigure().getyPos();
+			this.chessField[x][y].setBackground(LIGHT_BLUE);
+			for (int[] possMove : this.controller.getPossibleMoves()) {
+				this.chessField[possMove[0]][possMove[1]]
+						.setBackground(LIGHT_BLUE);
 			}
 		}
 	}
