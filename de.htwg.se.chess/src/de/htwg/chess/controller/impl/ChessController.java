@@ -497,7 +497,7 @@ public class ChessController extends Observable implements IChessController {
 	@Override
 	public String toJson() {
 		JSONObject obj = new JSONObject();
-		JSONArray array = new JSONArray();
+		JSONArray possMoves = new JSONArray();
 		obj.put("statusMessage", getStatusMessage());
 		obj.put("checkmateMessage", getCheckmateMessage());
 		obj.put("turnMessage", getTurnMessage());
@@ -508,9 +508,23 @@ public class ChessController extends Observable implements IChessController {
 			JSONArray arr = new JSONArray();
 			arr.add(move[0]);
 			arr.add(move[1]);
-			array.add(arr);
+			possMoves.add(arr);
 		}
-		obj.put("possMoves", array);
+		obj.put("possMoves", possMoves);
 		return obj.toJSONString();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public String getGameBoardAsJson() {
+		JSONArray gameBoard = new JSONArray();
+		for (int y = 0; y < FIELD_SIZE; y++) {
+			for (int x = 0; x < FIELD_SIZE; x++) {
+				JSONObject field = new JSONObject();
+				field.put("figure", getFieldValue(x, y));
+				gameBoard.add(field);
+			}
+		}
+		return gameBoard.toJSONString();
 	}
 }

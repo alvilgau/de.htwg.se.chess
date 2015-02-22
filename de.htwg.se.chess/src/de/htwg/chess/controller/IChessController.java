@@ -124,6 +124,13 @@ public interface IChessController extends IObservable {
 	String toJson();
 
 	/**
+	 * Convert the chess playground to JSON String
+	 * 
+	 * @return game board as JSON String
+	 */
+	String getGameBoardAsJson();
+
+	/**
 	 * @param x
 	 *            - vertical position
 	 * @param y
