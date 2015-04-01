@@ -7,22 +7,15 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import com.google.inject.Inject;
-import com.google.inject.Singleton;
 
 import de.htwg.chess.controller.IChessController;
 import de.htwg.chess.model.IField;
+import de.htwg.chess.model.IFieldFactory;
 import de.htwg.chess.model.IFigure;
-import de.htwg.chess.model.impl.Bishop;
-import de.htwg.chess.model.impl.Field;
-import de.htwg.chess.model.impl.Figure.Team;
-import de.htwg.chess.model.impl.King;
-import de.htwg.chess.model.impl.Knight;
-import de.htwg.chess.model.impl.Pawn;
-import de.htwg.chess.model.impl.Queen;
-import de.htwg.chess.model.impl.Rook;
+import de.htwg.chess.model.IFigure.Team;
+import de.htwg.chess.model.IFigureFacotry;
 import de.htwg.util.observer.Observable;
 
-@Singleton
 public class ChessController extends Observable implements IChessController {
 
 	private static final int ZERO = 0;
@@ -35,6 +28,10 @@ public class ChessController extends Observable implements IChessController {
 	private static final int SEVEN = 7;
 	private static final int FIELD_SIZE = 8;
 	private static final int LIST_SIZE = 16;
+
+	// Factories to create figures and fields
+	private IFieldFactory fieldFactory;
+	private IFigureFacotry figureFacotry;
 
 	// This lists contains all figures of a team
 	private List<IFigure> figuresTeamWhite;
@@ -71,7 +68,9 @@ public class ChessController extends Observable implements IChessController {
 	 * Constructs a new Chess Controller
 	 */
 	@Inject
-	public ChessController() {
+	public ChessController(IFieldFactory fieldFactory, IFigureFacotry figureFacotry) {
+		this.fieldFactory = fieldFactory;
+		this.figureFacotry = figureFacotry;
 		this.fields = new IField[FIELD_SIZE][FIELD_SIZE];
 		this.checkmate = new Checkmate();
 		this.moveFigure = null;
@@ -93,39 +92,41 @@ public class ChessController extends Observable implements IChessController {
 	private void initTeamOne() {
 		this.figuresTeamWhite = new ArrayList<IFigure>(LIST_SIZE);
 
-		this.figuresTeamWhite.add(new King(FOUR, ZERO, Team.white));
-		this.fields[FOUR][ZERO] = new Field(true,
+		this.figuresTeamWhite.add(this.figureFacotry.createKing(FOUR, ZERO, Team.white));
+		this.fields[FOUR][ZERO] = this.fieldFactory.createField(true,
 				this.figuresTeamWhite.get(ZERO));
 
-		this.figuresTeamWhite.add(new Rook(ZERO, ZERO, Team.white));
-		this.fields[ZERO][ZERO] = new Field(true,
+		this.figuresTeamWhite.add(this.figureFacotry.createRook(ZERO, ZERO, Team.white));
+		this.fields[ZERO][ZERO] = this.fieldFactory.createField(true,
 				this.figuresTeamWhite.get(ONE));
 
-		this.figuresTeamWhite.add(new Knight(ONE, ZERO, Team.white));
-		this.fields[ONE][ZERO] = new Field(true, this.figuresTeamWhite.get(TWO));
+		this.figuresTeamWhite.add(this.figureFacotry.createKnight(ONE, ZERO, Team.white));
+		this.fields[ONE][ZERO] = this.fieldFactory
+				.createField(true, this.figuresTeamWhite.get(TWO));
 
-		this.figuresTeamWhite.add(new Bishop(TWO, ZERO, Team.white));
-		this.fields[TWO][ZERO] = new Field(true,
+		this.figuresTeamWhite.add(this.figureFacotry.createBishop(TWO, ZERO, Team.white));
+		this.fields[TWO][ZERO] = this.fieldFactory.createField(true,
 				this.figuresTeamWhite.get(THREE));
 
-		this.figuresTeamWhite.add(new Queen(THREE, ZERO, Team.white));
-		this.fields[THREE][ZERO] = new Field(true,
+		this.figuresTeamWhite.add(this.figureFacotry.createQueen(THREE, ZERO, Team.white));
+		this.fields[THREE][ZERO] = this.fieldFactory.createField(true,
 				this.figuresTeamWhite.get(FOUR));
 
-		this.figuresTeamWhite.add(new Bishop(FIVE, ZERO, Team.white));
-		this.fields[FIVE][ZERO] = new Field(true,
+		this.figuresTeamWhite.add(this.figureFacotry.createBishop(FIVE, ZERO, Team.white));
+		this.fields[FIVE][ZERO] = this.fieldFactory.createField(true,
 				this.figuresTeamWhite.get(FIVE));
 
-		this.figuresTeamWhite.add(new Knight(SIX, ZERO, Team.white));
-		this.fields[SIX][ZERO] = new Field(true, this.figuresTeamWhite.get(SIX));
+		this.figuresTeamWhite.add(this.figureFacotry.createKnight(SIX, ZERO, Team.white));
+		this.fields[SIX][ZERO] = this.fieldFactory
+				.createField(true, this.figuresTeamWhite.get(SIX));
 
-		this.figuresTeamWhite.add(new Rook(SEVEN, ZERO, Team.white));
-		this.fields[SEVEN][ZERO] = new Field(true,
+		this.figuresTeamWhite.add(this.figureFacotry.createRook(SEVEN, ZERO, Team.white));
+		this.fields[SEVEN][ZERO] = this.fieldFactory.createField(true,
 				this.figuresTeamWhite.get(SEVEN));
 
 		for (int i = 0; i <= SEVEN; i++) {
-			this.figuresTeamWhite.add(new Pawn(i, ONE, Team.white, ONE));
-			this.fields[i][ONE] = new Field(true,
+			this.figuresTeamWhite.add(this.figureFacotry.createPawn(i, ONE, Team.white, ONE));
+			this.fields[i][ONE] = this.fieldFactory.createField(true,
 					this.figuresTeamWhite.get(FIELD_SIZE + i));
 		}
 	}
@@ -136,41 +137,41 @@ public class ChessController extends Observable implements IChessController {
 	private void initTeamTwo() {
 		this.figuresTeamBlack = new ArrayList<IFigure>(LIST_SIZE);
 
-		this.figuresTeamBlack.add(new King(FOUR, SEVEN, Team.black));
-		this.fields[FOUR][SEVEN] = new Field(true,
+		this.figuresTeamBlack.add(this.figureFacotry.createKing(FOUR, SEVEN, Team.black));
+		this.fields[FOUR][SEVEN] = this.fieldFactory.createField(true,
 				this.figuresTeamBlack.get(ZERO));
 
-		this.figuresTeamBlack.add(new Rook(ZERO, SEVEN, Team.black));
-		this.fields[ZERO][SEVEN] = new Field(true,
+		this.figuresTeamBlack.add(this.figureFacotry.createRook(ZERO, SEVEN, Team.black));
+		this.fields[ZERO][SEVEN] = this.fieldFactory.createField(true,
 				this.figuresTeamBlack.get(ONE));
 
-		this.figuresTeamBlack.add(new Knight(ONE, SEVEN, Team.black));
-		this.fields[ONE][SEVEN] = new Field(true,
+		this.figuresTeamBlack.add(this.figureFacotry.createKnight(ONE, SEVEN, Team.black));
+		this.fields[ONE][SEVEN] = this.fieldFactory.createField(true,
 				this.figuresTeamBlack.get(TWO));
 
-		this.figuresTeamBlack.add(new Bishop(TWO, SEVEN, Team.black));
-		this.fields[TWO][SEVEN] = new Field(true,
+		this.figuresTeamBlack.add(this.figureFacotry.createBishop(TWO, SEVEN, Team.black));
+		this.fields[TWO][SEVEN] = this.fieldFactory.createField(true,
 				this.figuresTeamBlack.get(THREE));
 
-		this.figuresTeamBlack.add(new Queen(THREE, SEVEN, Team.black));
-		this.fields[THREE][SEVEN] = new Field(true,
+		this.figuresTeamBlack.add(this.figureFacotry.createQueen(THREE, SEVEN, Team.black));
+		this.fields[THREE][SEVEN] = this.fieldFactory.createField(true,
 				this.figuresTeamBlack.get(FOUR));
 
-		this.figuresTeamBlack.add(new Bishop(FIVE, SEVEN, Team.black));
-		this.fields[FIVE][SEVEN] = new Field(true,
+		this.figuresTeamBlack.add(this.figureFacotry.createBishop(FIVE, SEVEN, Team.black));
+		this.fields[FIVE][SEVEN] = this.fieldFactory.createField(true,
 				this.figuresTeamBlack.get(FIVE));
 
-		this.figuresTeamBlack.add(new Knight(SIX, SEVEN, Team.black));
-		this.fields[SIX][SEVEN] = new Field(true,
+		this.figuresTeamBlack.add(this.figureFacotry.createKnight(SIX, SEVEN, Team.black));
+		this.fields[SIX][SEVEN] = this.fieldFactory.createField(true,
 				this.figuresTeamBlack.get(SIX));
 
-		this.figuresTeamBlack.add(new Rook(SEVEN, SEVEN, Team.black));
-		this.fields[SEVEN][SEVEN] = new Field(true,
+		this.figuresTeamBlack.add(this.figureFacotry.createRook(SEVEN, SEVEN, Team.black));
+		this.fields[SEVEN][SEVEN] = this.fieldFactory.createField(true,
 				this.figuresTeamBlack.get(SEVEN));
 
 		for (int i = 0; i <= SEVEN; i++) {
-			this.figuresTeamBlack.add(new Pawn(i, SIX, Team.black, SIX));
-			this.fields[i][SIX] = new Field(true,
+			this.figuresTeamBlack.add(this.figureFacotry.createPawn(i, SIX, Team.black, SIX));
+			this.fields[i][SIX] = this.fieldFactory.createField(true,
 					this.figuresTeamBlack.get(FIELD_SIZE + i));
 		}
 	}
@@ -181,7 +182,7 @@ public class ChessController extends Observable implements IChessController {
 	private void initFieldsRest() {
 		for (int i = 2; i <= FIVE; i++) {
 			for (int k = 0; k <= SEVEN; k++) {
-				this.fields[k][i] = new Field(k, i);
+				this.fields[k][i] = this.fieldFactory.createEmptyField(k, i);
 			}
 		}
 	}
@@ -203,8 +204,7 @@ public class ChessController extends Observable implements IChessController {
 	 * Updates the checkmate states of the kings
 	 */
 	private void updateCheckmate() {
-		this.checkmate.update(this.figuresTeamWhite, this.figuresTeamBlack,
-				this.fields);
+		this.checkmate.update(this.figuresTeamWhite, this.figuresTeamBlack, this.fields);
 
 		if (this.checkmate.isCheckWhite() && this.turn == 1) {
 			this.checkmate.nextStateWhite();
@@ -212,8 +212,7 @@ public class ChessController extends Observable implements IChessController {
 			this.checkmate.nextStateBlack();
 		}
 
-		this.gameover = this.checkmate.isMateBlack()
-				|| this.checkmate.isMateWhite();
+		this.gameover = this.checkmate.isMateBlack() || this.checkmate.isMateWhite();
 	}
 
 	/**
@@ -374,14 +373,14 @@ public class ChessController extends Observable implements IChessController {
 
 		if (team == Team.black) {
 			this.figuresTeamBlack.remove(this.moveFigure);
-			this.figuresTeamBlack.add(new Knight(xPos, yPos, team));
-			this.fields[xPos][yPos].setFigur(this.figuresTeamBlack
-					.get(this.figuresTeamBlack.size() - 1));
+			this.figuresTeamBlack.add(this.figureFacotry.createKnight(xPos, yPos, team));
+			this.fields[xPos][yPos]
+					.setFigur(this.figuresTeamBlack.get(this.figuresTeamBlack.size() - 1));
 		} else {
 			this.figuresTeamWhite.remove(this.moveFigure);
-			this.figuresTeamWhite.add(new Knight(xPos, yPos, team));
-			this.fields[xPos][yPos].setFigur(this.figuresTeamWhite
-					.get(this.figuresTeamWhite.size() - 1));
+			this.figuresTeamWhite.add(this.figureFacotry.createKnight(xPos, yPos, team));
+			this.fields[xPos][yPos]
+					.setFigur(this.figuresTeamWhite.get(this.figuresTeamWhite.size() - 1));
 		}
 
 		this.exchange = false;
@@ -397,14 +396,14 @@ public class ChessController extends Observable implements IChessController {
 
 		if (team == Team.black) {
 			this.figuresTeamBlack.remove(this.moveFigure);
-			this.figuresTeamBlack.add(new Bishop(xPos, yPos, team));
-			this.fields[xPos][yPos].setFigur(this.figuresTeamBlack
-					.get(this.figuresTeamBlack.size() - 1));
+			this.figuresTeamBlack.add(this.figureFacotry.createBishop(xPos, yPos, team));
+			this.fields[xPos][yPos]
+					.setFigur(this.figuresTeamBlack.get(this.figuresTeamBlack.size() - 1));
 		} else {
 			this.figuresTeamWhite.remove(this.moveFigure);
-			this.figuresTeamWhite.add(new Bishop(xPos, yPos, team));
-			this.fields[xPos][yPos].setFigur(this.figuresTeamWhite
-					.get(this.figuresTeamWhite.size() - 1));
+			this.figuresTeamWhite.add(this.figureFacotry.createBishop(xPos, yPos, team));
+			this.fields[xPos][yPos]
+					.setFigur(this.figuresTeamWhite.get(this.figuresTeamWhite.size() - 1));
 		}
 
 		this.exchange = false;
@@ -420,14 +419,14 @@ public class ChessController extends Observable implements IChessController {
 
 		if (team == Team.black) {
 			this.figuresTeamBlack.remove(this.moveFigure);
-			this.figuresTeamBlack.add(new Rook(xPos, yPos, team));
-			this.fields[xPos][yPos].setFigur(this.figuresTeamBlack
-					.get(this.figuresTeamBlack.size() - 1));
+			this.figuresTeamBlack.add(this.figureFacotry.createRook(xPos, yPos, team));
+			this.fields[xPos][yPos]
+					.setFigur(this.figuresTeamBlack.get(this.figuresTeamBlack.size() - 1));
 		} else {
 			this.figuresTeamWhite.remove(this.moveFigure);
-			this.figuresTeamWhite.add(new Rook(xPos, yPos, team));
-			this.fields[xPos][yPos].setFigur(this.figuresTeamWhite
-					.get(this.figuresTeamWhite.size() - 1));
+			this.figuresTeamWhite.add(this.figureFacotry.createRook(xPos, yPos, team));
+			this.fields[xPos][yPos]
+					.setFigur(this.figuresTeamWhite.get(this.figuresTeamWhite.size() - 1));
 		}
 
 		this.exchange = false;
@@ -443,14 +442,14 @@ public class ChessController extends Observable implements IChessController {
 
 		if (team == Team.black) {
 			this.figuresTeamBlack.remove(this.moveFigure);
-			this.figuresTeamBlack.add(new Queen(xPos, yPos, team));
-			this.fields[xPos][yPos].setFigur(this.figuresTeamBlack
-					.get(this.figuresTeamBlack.size() - 1));
+			this.figuresTeamBlack.add(this.figureFacotry.createQueen(xPos, yPos, team));
+			this.fields[xPos][yPos]
+					.setFigur(this.figuresTeamBlack.get(this.figuresTeamBlack.size() - 1));
 		} else {
 			this.figuresTeamWhite.remove(this.moveFigure);
-			this.figuresTeamWhite.add(new Queen(xPos, yPos, team));
-			this.fields[xPos][yPos].setFigur(this.figuresTeamWhite
-					.get(this.figuresTeamWhite.size() - 1));
+			this.figuresTeamWhite.add(this.figureFacotry.createQueen(xPos, yPos, team));
+			this.fields[xPos][yPos]
+					.setFigur(this.figuresTeamWhite.get(this.figuresTeamWhite.size() - 1));
 		}
 
 		this.exchange = false;

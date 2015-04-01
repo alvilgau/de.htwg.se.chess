@@ -7,28 +7,28 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+
+import de.htwg.chess.ChessModule;
+import de.htwg.chess.controller.IChessController;
+
 public class ControllerTest {
 
+	Injector injector;
 	ChessController controller;
 	String start;
 
 	@Before
 	public void setUp() {
-		this.controller = new ChessController();
+		this.injector = Guice.createInjector(new ChessModule());
+		this.controller = (ChessController) this.injector.getInstance(IChessController.class);
 		this.start = this.controller.toString();
 	}
 
 	@Test
 	public void testToString() {
-		assertTrue(this.controller.toString().contains(
-				"T  P  L  D  K  L  P  T  "));
-	}
-
-	@Test
-	public void testSetExchange() {
-		assertFalse(this.controller.getExchange());
-		this.controller.setExchange(true);
-		assertTrue(this.controller.getExchange());
+		assertTrue(this.controller.toString().contains("T  P  L  D  K  L  P  T  "));
 	}
 
 	@Test
@@ -109,23 +109,19 @@ public class ControllerTest {
 
 		// Exchange with Knight
 		this.controller.exchangeKnight();
-		assertTrue(this.controller.toString().contains(
-				"P  P  L  D  K  L  P  T  "));
+		assertTrue(this.controller.toString().contains("P  P  L  D  K  L  P  T  "));
 
 		// Exchange with Bishop
 		this.controller.exchangeBishop();
-		assertTrue(this.controller.toString().contains(
-				"L  P  L  D  K  L  P  T  "));
+		assertTrue(this.controller.toString().contains("L  P  L  D  K  L  P  T  "));
 
 		// Exchange with Rook
 		this.controller.exchangeRook();
-		assertTrue(this.controller.toString().contains(
-				"T  P  L  D  K  L  P  T  "));
+		assertTrue(this.controller.toString().contains("T  P  L  D  K  L  P  T  "));
 
 		// Exchange with Queen
 		this.controller.exchangeQueen();
-		assertTrue(this.controller.toString().contains(
-				"D  P  L  D  K  L  P  T  "));
+		assertTrue(this.controller.toString().contains("D  P  L  D  K  L  P  T  "));
 	}
 
 	@Test
@@ -223,8 +219,15 @@ public class ControllerTest {
 
 	@Test
 	public void testToJson() {
-		String json = "{\"checkmateMessage\":\"\",\"select\":false,";
+		this.controller.select(0, 1);
+		String json = "{\"checkmateMessage\":\"\",\"select\":true,";
 		assertTrue(this.controller.toJson().startsWith(json));
+	}
+
+	@Test
+	public void testGameBoardAsJson() {
+		String json = "[{\"figure\":\"whiteT\"},{\"figure\":\"whiteP\"},{\"figure\":\"whiteL\"}";
+		assertTrue(this.controller.getGameBoardAsJson().startsWith(json));
 	}
 
 	@Test

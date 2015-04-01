@@ -7,7 +7,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.htwg.chess.model.impl.Figure.Team;
+import de.htwg.chess.model.IFigure.Team;
 
 public class KnightTest {
 
@@ -16,44 +16,44 @@ public class KnightTest {
 
 	@Before
 	public void setUp() {
-		springer = new Knight(1, 3, Team.white);
-		field = new Field[4][8];
+		this.springer = new Knight(1, 3, Team.white);
+		this.field = new Field[4][8];
 
 		for (int i = 0; i < 8; i++) {
-			field[0][i] = new Field();
-			field[1][i] = new Field();
-			field[2][i] = new Field();
-			field[3][i] = new Field();
+			this.field[0][i] = new Field();
+			this.field[1][i] = new Field();
+			this.field[2][i] = new Field();
+			this.field[3][i] = new Field();
 		}
 	}
 
 	@Test
 	public void testGetPosX() {
-		assertEquals(1, springer.getxPos());
+		assertEquals(1, this.springer.getxPos());
 	}
 
 	@Test
 	public void testGetPosY() {
-		assertEquals(3, springer.getyPos());
+		assertEquals(3, this.springer.getyPos());
 	}
 
 	@Test
 	public void testPossibleMoves() {
 		// Collision with figure of the same team
-		assertTrue(springer.getPossibleMoves(field).contains(field[3][4]));
-		field[3][4].setSet(true);
-		field[3][4].setFigur(new Bishop(3, 4, Team.white));
-		assertFalse(springer.getPossibleMoves(field).contains(field[3][4]));
+		assertTrue(this.springer.getPossibleMoves(this.field).contains(this.field[3][4]));
+		this.field[3][4].setSet(true);
+		this.field[3][4].setFigur(new Bishop(3, 4, Team.white));
+		assertFalse(this.springer.getPossibleMoves(this.field).contains(this.field[3][4]));
 
 		// Kill collision
-		assertTrue(springer.getPossibleMoves(field).contains(field[0][5]));
-		field[0][5].setSet(true);
-		field[0][5].setFigur(new Bishop(3, 4, Team.black));
-		assertTrue(springer.getPossibleMoves(field).contains(field[0][5]));
+		assertTrue(this.springer.getPossibleMoves(this.field).contains(this.field[0][5]));
+		this.field[0][5].setSet(true);
+		this.field[0][5].setFigur(new Bishop(3, 4, Team.black));
+		assertTrue(this.springer.getPossibleMoves(this.field).contains(this.field[0][5]));
 	}
 
 	@Test
 	public void testToString() {
-		assertEquals("P", springer.toString());
+		assertEquals("P", this.springer.toString());
 	}
 }

@@ -1,67 +1,75 @@
 package de.htwg.chess.view.tui;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+
+import de.htwg.chess.ChessModule;
+import de.htwg.chess.controller.IChessController;
 import de.htwg.chess.controller.impl.ChessController;
 
 public class TextUITest {
 
+	Injector injector;
 	TextUI tui;
 	ChessController controller;
-	
+
 	@Before
 	public void setUp() {
 		PropertyConfigurator.configure("log4j.properties");
-		controller = new ChessController();
-		tui = new TextUI(controller);
+		this.injector = Guice.createInjector(new ChessModule());
+		this.controller = (ChessController) this.injector.getInstance(IChessController.class);
+		this.tui = this.injector.getInstance(TextUI.class);
 	}
-	
+
 	@Test
 	public void testProcessInputLine() {
 		/* Movement input */
-		assertFalse(tui.processInputLine("q"));
-		assertTrue(tui.processInputLine("r"));
-		assertTrue(tui.processInputLine("sa2"));
-		assertTrue(tui.processInputLine("ma4"));
-		assertTrue(tui.processInputLine("s2323"));
-		assertTrue(tui.processInputLine("m4323"));
-		
+		assertFalse(this.tui.processInputLine("q"));
+		assertTrue(this.tui.processInputLine("r"));
+		assertTrue(this.tui.processInputLine("sa2"));
+		assertTrue(this.tui.processInputLine("ma4"));
+		assertTrue(this.tui.processInputLine("s2323"));
+		assertTrue(this.tui.processInputLine("m4323"));
+
 		/* exchange input */
-		controller.setExchange(true);
-		assertTrue(tui.processInputLine("knight"));
-		
-		controller.setExchange(true);
-		assertTrue(tui.processInputLine("bishop"));
-		
-		controller.setExchange(true);
-		assertTrue(tui.processInputLine("rook"));
-		
-		controller.setExchange(true);
-		assertTrue(tui.processInputLine("queen"));
-		
-		controller.setExchange(true);
-		assertTrue(tui.processInputLine("sa2"));
-		
+		this.controller.setExchange(true);
+		assertTrue(this.tui.processInputLine("knight"));
+
+		this.controller.setExchange(true);
+		assertTrue(this.tui.processInputLine("bishop"));
+
+		this.controller.setExchange(true);
+		assertTrue(this.tui.processInputLine("rook"));
+
+		this.controller.setExchange(true);
+		assertTrue(this.tui.processInputLine("queen"));
+
+		this.controller.setExchange(true);
+		assertTrue(this.tui.processInputLine("sa2"));
+
 		/* game over input */
-		controller.setExchange(false);
-		controller.setGameover(true);
-		assertTrue(tui.processInputLine("sa3"));
+		this.controller.setExchange(false);
+		this.controller.setGameover(true);
+		assertTrue(this.tui.processInputLine("sa3"));
 	}
-	
+
 	@Test
 	public void testPrintTUI() {
-		tui.printTUI();
-		
-		controller.setExchange(true);
-		tui.printTUI();
-		
-		controller.setExchange(false);
-		controller.setGameover(true);
-		tui.printTUI();
+		this.tui.printTUI();
+
+		this.controller.setExchange(true);
+		this.tui.printTUI();
+
+		this.controller.setExchange(false);
+		this.controller.setGameover(true);
+		this.tui.printTUI();
 	}
-	
+
 }

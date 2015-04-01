@@ -4,6 +4,10 @@ import java.util.List;
 
 public interface IFigure {
 
+	public enum Team {
+		white, black
+	};
+
 	/**
 	 * Method to get the x position of a figure
 	 * 

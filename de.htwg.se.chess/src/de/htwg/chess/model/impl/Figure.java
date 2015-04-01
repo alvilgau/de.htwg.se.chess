@@ -5,10 +5,6 @@ import de.htwg.chess.model.IFigure;
 
 public abstract class Figure implements IFigure {
 
-	public enum Team {
-		white, black
-	};
-
 	static final int POS_MAX = 7;
 	static final int POS_MIN = 0;
 
@@ -20,12 +16,12 @@ public abstract class Figure implements IFigure {
 
 	@Override
 	public int getxPos() {
-		return xPos;
+		return this.xPos;
 	}
 
 	@Override
 	public int getyPos() {
-		return yPos;
+		return this.yPos;
 	}
 
 	/**
@@ -60,18 +56,18 @@ public abstract class Figure implements IFigure {
 
 	@Override
 	public String getTeam() {
-		return team.toString();
+		return this.team.toString();
 	}
 
 	@Override
 	public int getTeamNumber() {
-		return team.ordinal();
+		return this.team.ordinal();
 	}
 
 	@Override
 	public boolean move(int x, int y) {
-		xPos = x;
-		yPos = y;
+		this.xPos = x;
+		this.yPos = y;
 		return false;
 	}
 
@@ -87,11 +83,10 @@ public abstract class Figure implements IFigure {
 	 * @return the corresponding field
 	 */
 	public IField getNeighbour(int x, int y, IField[][] fields) {
-		int newXPos = xPos + x;
-		int newYPos = yPos + y;
+		int newXPos = this.xPos + x;
+		int newYPos = this.yPos + y;
 
-		if (newXPos > POS_MAX || newYPos > POS_MAX || newXPos < POS_MIN
-				|| newYPos < POS_MIN) {
+		if (newXPos > POS_MAX || newYPos > POS_MAX || newXPos < POS_MIN || newYPos < POS_MIN) {
 			return null;
 		}
 

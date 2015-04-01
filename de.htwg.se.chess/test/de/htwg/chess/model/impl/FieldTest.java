@@ -8,7 +8,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.htwg.chess.model.impl.Figure.Team;
+import de.htwg.chess.model.IFigure.Team;
 
 public class FieldTest {
 
@@ -18,50 +18,50 @@ public class FieldTest {
 
 	@Before
 	public void setUp() {
-		feld = new Field();
-		feld2 = new Field(true, new Bishop(3, 5, Team.black));
-		feld3 = new Field(1, 1);
+		this.feld = new Field();
+		this.feld2 = new Field(true, new Bishop(3, 5, Team.black));
+		this.feld3 = new Field(1, 1);
 	}
 
 	@Test
 	public void testPosition() {
-		assertEquals(feld2.getxPos(), feld2.getFigur().getxPos());
-		assertEquals(feld2.getyPos(), feld2.getFigur().getyPos());
-		assertEquals(feld3.getxPos(), 1);
+		assertEquals(this.feld2.getxPos(), this.feld2.getFigur().getxPos());
+		assertEquals(this.feld2.getyPos(), this.feld2.getFigur().getyPos());
+		assertEquals(this.feld3.getxPos(), 1);
 	}
 
 	@Test
 	public void testIsSet() {
-		assertEquals(false, feld.isSet());
-		feld.setSet(true);
-		assertEquals(true, feld.isSet());
-		assertTrue(feld2.isSet());
+		assertEquals(false, this.feld.isSet());
+		this.feld.setSet(true);
+		assertEquals(true, this.feld.isSet());
+		assertTrue(this.feld2.isSet());
 	}
 
 	@Test
 	public void testGetFigur() {
-		feld.setFigur(new Pawn(5, 4, Team.white, 1));
-		assertNotNull(feld.getFigur());
-		assertNotNull(feld2.getFigur());
+		this.feld.setFigur(new Pawn(5, 4, Team.white, 1));
+		assertNotNull(this.feld.getFigur());
+		assertNotNull(this.feld2.getFigur());
 	}
 
 	@Test
 	public void testToString() {
-		assertEquals("L", feld2.toString());
-		assertEquals("-", feld.toString());
+		assertEquals("L", this.feld2.toString());
+		assertEquals("-", this.feld.toString());
 	}
 
 	@Test
 	public void testIsKing() {
-		assertFalse(feld2.isKing());
-		feld2.setFigur(new King(0, 5, Team.black));
-		assertTrue(feld2.isKing());
+		assertFalse(this.feld2.isKing());
+		this.feld2.setFigur(new King(0, 5, Team.black));
+		assertTrue(this.feld2.isKing());
 	}
 
 	@Test
 	public void testReset() {
-		feld2.clear();
-		assertFalse(feld2.isSet());
+		this.feld2.clear();
+		assertFalse(this.feld2.isSet());
 	}
 
 }
